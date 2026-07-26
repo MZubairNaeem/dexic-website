@@ -1,0 +1,185 @@
+---
+export const prerender = true
+
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout
+  title="Contact Dexic — Let's start a conversation."
+  description="Whether it's a product question, a partnership, or a problem you think is worth solving — write to us and a real person will reply."
+  active="contact"
+>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Contact</span>
+        </div>
+        <h1 class="h-hero hero-title">Let's start a conversation.</h1>
+        <p class="hero-copy">
+          Whether it's a product question, a partnership, or a problem you think is worth solving — write to us and a
+          real person will reply.
+        </p>
+        <div class="numbered-list info-list">
+          <div class="info-row">
+            <span class="label">General</span>
+            <a href="mailto:contact@dexic.tech" class="value">contact@dexic.tech</a>
+          </div>
+          <div class="info-row">
+            <span class="label">Founders</span>
+            <span class="value">
+              <a href="mailto:zubair@dexic.tech">zubair@dexic.tech</a><br />
+              <a href="mailto:talha@dexic.tech">talha@dexic.tech</a>
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="label">Products</span>
+            <a href="/#products" class="value">StacShip &middot; TableSnap &middot; Woofy</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card contact-card">
+        <div class="form-success" data-contact-success hidden>
+          <span class="tag">Received</span>
+          <p>Thanks for reaching out — we'll reply shortly.</p>
+        </div>
+        <form class="form-grid" data-contact-form>
+          <label class="form-field">
+            <span>Name</span>
+            <input type="text" name="name" required placeholder="Your name" />
+          </label>
+          <label class="form-field">
+            <span>Email</span>
+            <input type="email" name="email" required placeholder="you@company.com" />
+          </label>
+          <label class="form-field">
+            <span>Company <span class="optional">(optional)</span></span>
+            <input type="text" name="company" placeholder="Company" />
+          </label>
+          <label class="form-field">
+            <span>Subject</span>
+            <input type="text" name="subject" required placeholder="What's this about?" />
+          </label>
+          <label class="form-field full">
+            <span>Message</span>
+            <textarea name="message" rows="6" required placeholder="Tell us a little about it."></textarea>
+          </label>
+          <p class="form-error" data-contact-error hidden>Something went wrong. Please try again.</p>
+          <button type="submit" class="btn btn-primary form-submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]')
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const errorEl = document.querySelector('[data-contact-error]')
+    const successEl = document.querySelector('[data-contact-success]')
+    errorEl?.setAttribute('hidden', '')
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
+    if (submitBtn) {
+      submitBtn.disabled = true
+      submitBtn.classList.add('is-loading')
+    }
+    try {
+      const formData = new FormData(form)
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (!res.ok) throw new Error('Request failed')
+      form.hidden = true
+      successEl?.removeAttribute('hidden')
+    } catch {
+      errorEl?.removeAttribute('hidden')
+      if (submitBtn) {
+        submitBtn.disabled = false
+        submitBtn.classList.remove('is-loading')
+      }
+    }
+  })
+</script>
+
+<style>
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 32px 140px;
+  }
+
+  .split {
+    padding: 0;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+
+  .hero-title {
+    font-size: 52px;
+    line-height: 1.06;
+  }
+
+  .hero-copy {
+    margin: 26px 0 0;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 400px;
+    text-wrap: pretty;
+  }
+
+  .info-list {
+    margin-top: 48px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-row .label {
+    font-size: 14px;
+    color: var(--dim);
+  }
+
+  .info-row .value {
+    font-size: 14px;
+    color: var(--fg);
+    text-align: right;
+  }
+
+  .optional {
+    color: var(--dim);
+  }
+
+  .contact-card {
+    padding: 44px;
+  }
+
+  .form-submit {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .form-error {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 80px 24px 90px;
+    }
+    .split {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+</style>

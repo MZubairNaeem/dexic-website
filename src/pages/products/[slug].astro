@@ -1,0 +1,402 @@
+---
+export const prerender = true
+
+import Layout from '../../layouts/Layout.astro'
+import ProductRings from '../../components/ProductRings.astro'
+import { PRODUCTS, getRelatedProducts } from '../../data/products'
+import type { GetStaticPaths } from 'astro'
+
+export const getStaticPaths = (() => {
+  return PRODUCTS.map((p) => ({ params: { slug: p.slug }, props: { product: p } }))
+}) satisfies GetStaticPaths
+
+const { product } = Astro.props
+const related = getRelatedProducts(product.slug)
+---
+
+<Layout
+  title={`${product.name} — Dexic`}
+  description={product.summary}
+  active="product"
+>
+  <section class="hero">
+    <div class="container">
+      <a href="/#products" class="back-link">
+        <span>&#8592;</span>All products
+      </a>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="dot"></span>
+            <span>{product.category}</span>
+          </div>
+          <h1 class="h1">{product.name}</h1>
+          <p class="tagline">{product.tagline}</p>
+          <p class="summary">{product.summary}</p>
+          <div class="cta-row">
+            <a href="#demo" class="btn btn-primary">Request a Demo</a>
+            <a href={product.url} target="_blank" rel="noopener" class="btn btn-secondary">
+              Visit {product.domain}<span class="arrow">&#8599;</span>
+            </a>
+          </div>
+        </div>
+        <ProductRings />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>The Problem</span>
+        </div>
+        <h2 class="h-sub">{product.problemTitle}</h2>
+      </div>
+      <div class="text-col">
+        <p>{product.problemA}</p>
+        <p>{product.problemB}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Our Approach</span>
+        </div>
+        <h2 class="h-sub">{product.approachTitle}</h2>
+      </div>
+      <div class="text-col-single">
+        <p>{product.approach}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span>Features</span>
+      </div>
+      <h2 class="h-sub section-title">What it does.</h2>
+      <div class="feature-grid">
+        {
+          product.features.map((f) => (
+            <div class="feature-cell">
+              <span class="num">{f.num}</span>
+              <h3>{f.title}</h3>
+              <p>{f.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span>How It Works</span>
+      </div>
+      <h2 class="h-sub section-title">{product.howTitle}</h2>
+      <div class="steps-grid">
+        {
+          product.steps.map((s) => (
+            <div class="step">
+              <div class="step-head">
+                <span class="num">{s.num}</span>
+                <span class="rule" />
+              </div>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Benefits</span>
+        </div>
+        <h2 class="h-sub">Why it matters.</h2>
+      </div>
+      <div class="numbered-list no-margin">
+        {
+          product.benefits.map((b) => (
+            <div class="benefit-row">
+              <span class="title">{b.title}</span>
+              <span class="body">{b.body}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>FAQ</span>
+        </div>
+        <h2 class="h-sub">Questions.</h2>
+      </div>
+      <div class="numbered-list no-margin">
+        {
+          product.faq.map((q) => (
+            <div class="faq-item">
+              <button type="button" class="faq-question">
+                <span>{q.question}</span>
+                <span class="faq-sign">+</span>
+              </button>
+              <p class="faq-answer">{q.answer}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="section demo-section">
+    <div class="section-inner split">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Request a Demo</span>
+        </div>
+        <h2 class="h-sub">See it in action.</h2>
+        <p class="demo-copy">Schedule a walkthrough to see how this product fits your workflow.</p>
+      </div>
+      <div class="card demo-card">
+        <div class="form-success" data-demo-success hidden>
+          <span class="tag">Received</span>
+          <p>Thanks — we'll be in touch to confirm a time.</p>
+        </div>
+        <form class="form-grid" data-demo-form data-product={product.name}>
+          <input type="hidden" name="product" value={product.name} />
+          <label class="form-field">
+            <span>Name</span>
+            <input type="text" name="name" required placeholder="Your name" />
+          </label>
+          <label class="form-field">
+            <span>Company</span>
+            <input type="text" name="company" placeholder="Company" />
+          </label>
+          <label class="form-field">
+            <span>Email</span>
+            <input type="email" name="email" required placeholder="you@company.com" />
+          </label>
+          <label class="form-field">
+            <span>Preferred date</span>
+            <input type="date" name="date" />
+          </label>
+          <label class="form-field full">
+            <span>Message</span>
+            <textarea name="message" rows="4" placeholder="What would you like to see?"></textarea>
+          </label>
+          <p class="form-error" data-demo-error hidden>Something went wrong. Please try again.</p>
+          <button type="submit" class="btn btn-primary form-submit">Request Demo</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section">
+        <div class="section-inner">
+          <div class="eyebrow related-eyebrow">
+            <span class="dot" />
+            <span>Related Products</span>
+          </div>
+          <div class="related-grid">
+            {related.map((r) => (
+              <a href={`/products/${r.slug}`} class="related-card">
+                <span class="product-category">{r.category}</span>
+                <h3>{r.name}</h3>
+                <p>{r.tagline}</p>
+                <span class="learn-more">
+                  Learn More<span class="arrow">&#8594;</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</Layout>
+
+<script>
+  const forms = document.querySelectorAll<HTMLFormElement>('[data-demo-form]')
+  forms.forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const errorEl = form.parentElement?.querySelector('[data-demo-error]')
+      const successEl = form.parentElement?.querySelector('[data-demo-success]')
+      errorEl?.setAttribute('hidden', '')
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
+      if (submitBtn) {
+        submitBtn.disabled = true
+        submitBtn.classList.add('is-loading')
+      }
+      try {
+        const formData = new FormData(form)
+        const res = await fetch('/api/demo', {
+          method: 'POST',
+          body: JSON.stringify(Object.fromEntries(formData)),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        if (!res.ok) throw new Error('Request failed')
+        form.hidden = true
+        successEl?.removeAttribute('hidden')
+      } catch {
+        errorEl?.removeAttribute('hidden')
+        if (submitBtn) {
+          submitBtn.disabled = false
+          submitBtn.classList.remove('is-loading')
+        }
+      }
+    })
+  })
+</script>
+
+<style>
+  .hero {
+    padding: 96px 0 100px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 44px;
+  }
+
+  .back-link:hover {
+    color: var(--fg);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 64px;
+    align-items: center;
+  }
+
+  .h1 {
+    margin: 0;
+    font-size: 60px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+
+  .tagline {
+    margin: 22px 0 0;
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    max-width: 540px;
+  }
+
+  .summary {
+    margin: 18px 0 0;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 540px;
+    text-wrap: pretty;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .arrow {
+    color: var(--accent);
+  }
+
+  .text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+  }
+
+  .text-col p,
+  .text-col-single p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .text-col-single {
+    max-width: 600px;
+  }
+
+  .section-title {
+    margin-bottom: 56px;
+  }
+
+  .demo-copy {
+    margin: 20px 0 0;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 400px;
+    text-wrap: pretty;
+  }
+
+  .demo-card {
+    padding: 40px;
+  }
+
+  .form-submit {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .form-error {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .related-eyebrow {
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .h1 {
+      font-size: 40px;
+    }
+  }
+</style>

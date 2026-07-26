@@ -1,0 +1,169 @@
+:root {
+  --bg: #0a0a0a;
+  --fg: #ffffff;
+  --muted: #a1a1aa;
+  --dim: #52525b;
+  --border: #1a1a1a;
+  --border-2: #222222;
+  --border-3: #2a2a2a;
+  --border-4: #333333;
+  --border-5: #3f3f46;
+  --accent: #ff2d2d;
+  --card: #111111;
+  --card-hover: #131313;
+  --font-sans: 'Geist', 'SF Pro Display', 'Helvetica Neue', Helvetica, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--dim);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--border-5);
+}
+
+[data-reveal].reveal-pending {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes dexicDrift {
+  0% {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  88% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(300px);
+    opacity: 0;
+  }
+}
+
+@keyframes dexicDriftX {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.4;
+  }
+  85% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(210px);
+    opacity: 0;
+  }
+}
+
+@keyframes dexicPulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes dexicRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dexicFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dexicSpin {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
+
+@keyframes dexicSpinBack {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(-315deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

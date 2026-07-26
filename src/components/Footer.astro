@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../assets/dexic-logo.png'
+---
+
+<footer class="site-footer">
+  <div class="container top">
+    <div>
+      <div class="logo-wrap">
+        <Image src={logo} alt="Dexic" height={24} />
+      </div>
+      <p class="tagline">Building products that remove complexity.</p>
+    </div>
+    <div class="col">
+      <span class="col-title">Company</span>
+      <a href="/#products">Products</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div class="col">
+      <span class="col-title">Elsewhere</span>
+      <a href="https://www.linkedin.com/company/dexic/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://x.com" target="_blank" rel="noopener">X</a>
+    </div>
+    <div class="col">
+      <span class="col-title">Legal</span>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/refund-policy">Refund Policy</a>
+      <a href="/terms-and-conditions">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <div class="container bottom">
+    <span>&copy; {new Date().getFullYear()} Dexic. All rights reserved.</span>
+    <span>Driving Excellence in Xperiences, Innovation and Commitment.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+  }
+
+  .top {
+    padding: 72px 32px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 0.6fr));
+    gap: 40px;
+  }
+
+  .logo-wrap {
+    margin-bottom: 10px;
+  }
+
+  .tagline {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 300px;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .col-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .col a {
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .col a:hover {
+    color: var(--fg);
+  }
+
+  .bottom {
+    padding: 28px 32px 44px;
+    border-top: 1px solid #141414;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+
+  @media (max-width: 900px) {
+    .top {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .top {
+      grid-template-columns: 1fr;
+    }
+    .bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

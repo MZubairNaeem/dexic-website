@@ -1,0 +1,150 @@
+<div class="hero-visual" aria-hidden="true">
+  <div class="grid-bg"></div>
+  <div class="dot-grid">
+    {
+      Array.from({ length: 16 }).map((_, i) => {
+        const rotated = i % 2 === 1
+        const opacity = 0.09 + ((i * 37) % 22) / 100
+        return <div class="dot-cell" style={`border-color:rgba(255,255,255,${rotated ? opacity * 0.6 : opacity});${rotated ? 'transform:rotate(45deg)' : ''}`} />
+      })
+    }
+  </div>
+  <div class="v-line"></div>
+  <div class="v-dot"></div>
+  <div class="h-lines">
+    {['56%', '68%', '78%', '86%', '92%', '86%', '78%', '68%', '56%'].map((w, i) => {
+      const opacities = [0.1, 0.14, 0.2, 0.28, 0.4, 0.28, 0.2, 0.14, 0.1]
+      return <div class="h-line" style={`width:${w};background:rgba(255,255,255,${opacities[i]})`} />
+    })}
+  </div>
+  <div class="drift-x"></div>
+  <div class="drift-y"></div>
+  <div class="label label-left">
+    <span class="rule"></span>
+    <span>Complex</span>
+  </div>
+  <div class="label label-right">
+    <span>Effortless</span>
+    <span class="rule"></span>
+  </div>
+</div>
+
+<style>
+  .hero-visual {
+    position: relative;
+    height: 460px;
+    overflow: hidden;
+  }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(80% 70% at 50% 50%, #000 20%, transparent 100%);
+    mask-image: radial-gradient(80% 70% at 50% 50%, #000 20%, transparent 100%);
+  }
+
+  .dot-grid {
+    position: absolute;
+    left: 8px;
+    top: 96px;
+    display: grid;
+    grid-template-columns: repeat(4, 34px);
+    grid-auto-rows: 34px;
+    gap: 10px;
+  }
+
+  .dot-cell {
+    border: 1px solid;
+  }
+
+  .v-line {
+    position: absolute;
+    left: 216px;
+    top: 60px;
+    bottom: 60px;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(255, 45, 45, 0), #ff2d2d 45%, rgba(255, 45, 45, 0));
+  }
+
+  .v-dot {
+    position: absolute;
+    left: 213px;
+    top: 224px;
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    animation: dexicPulse 5s ease-in-out infinite;
+  }
+
+  .h-lines {
+    position: absolute;
+    left: 268px;
+    right: 0;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+  }
+
+  .h-line {
+    height: 1px;
+  }
+
+  .drift-x {
+    position: absolute;
+    left: 268px;
+    right: 40px;
+    top: 70px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+    animation: dexicDrift 14s ease-in-out infinite;
+  }
+
+  .drift-y {
+    position: absolute;
+    left: 8px;
+    top: 88px;
+    width: 1px;
+    height: 210px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+    animation: dexicDriftX 16s ease-in-out infinite 2s;
+  }
+
+  .label {
+    position: absolute;
+    bottom: 52px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .label-left {
+    left: 8px;
+    color: #3f3f46;
+  }
+
+  .label-right {
+    right: 0;
+    color: #52525b;
+  }
+
+  .label .rule {
+    width: 14px;
+    height: 1px;
+    background: #2a2a2a;
+  }
+
+  @media (max-width: 900px) {
+    .hero-visual {
+      display: none;
+    }
+  }
+</style>

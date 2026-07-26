@@ -1,0 +1,245 @@
+---
+export const prerender = true
+
+import Layout from '../layouts/Layout.astro'
+import HeroVisual from '../components/HeroVisual.astro'
+import { PRODUCTS } from '../data/products'
+---
+
+<Layout
+  title="Dexic — Building products that remove complexity."
+  description="Dexic creates software products that simplify complex workflows — from developer infrastructure to industry-specific platforms — through thoughtful engineering and exceptional user experiences."
+  active="home"
+>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">
+          <span class="dot pulse"></span>
+          <span>A product company</span>
+        </div>
+        <h1 class="h-hero">Building products that remove complexity.</h1>
+        <p class="lead">Driving Excellence in Xperiences, Innovation and Commitment.</p>
+        <p class="sub">
+          Dexic creates software products that simplify complex workflows—from developer infrastructure to
+          industry-specific platforms—through thoughtful engineering and exceptional user experiences.
+        </p>
+        <div class="cta-row">
+          <a href="/#products" class="btn btn-primary">Explore Products</a>
+          <a href="/about" class="btn btn-secondary">About Dexic</a>
+        </div>
+      </div>
+      <HeroVisual />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Philosophy</span>
+        </div>
+        <h2 class="h-section">Built with purpose.</h2>
+      </div>
+      <div>
+        <p class="philosophy-lead">We believe software should reduce friction, not create it.</p>
+        <div class="numbered-list">
+          <div class="numbered-row">
+            <span class="num">01</span>
+            <span class="label">Every product starts by understanding a real problem.</span>
+          </div>
+          <div class="numbered-row">
+            <span class="num">02</span>
+            <span class="label">Every feature earns its place.</span>
+          </div>
+          <div class="numbered-row">
+            <span class="num">03</span>
+            <span class="label">Every interaction should feel effortless.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="section products-section">
+    <div class="section-inner">
+      <div class="products-head" data-reveal>
+        <div>
+          <div class="eyebrow">
+            <span class="dot"></span>
+            <span>Portfolio</span>
+          </div>
+          <h2 class="h-section">Our Products</h2>
+        </div>
+        <p class="products-head-copy">Each Dexic product exists because we found a problem worth solving.</p>
+      </div>
+
+      <div class="products-list">
+        {
+          PRODUCTS.map((p) => (
+            <a href={`/products/${p.slug}`} class="product-row" data-reveal>
+              <div>
+                <div class="product-meta">
+                  <span class="product-num">{p.num}</span>
+                  <span class="rule"></span>
+                  <span class="product-category">{p.category}</span>
+                </div>
+                <h3 class="product-title">{p.name}</h3>
+                <p class="product-tagline">{p.tagline}</p>
+                <p class="product-summary">{p.summary}</p>
+                <span class="learn-more">
+                  Learn More<span class="arrow">&#8594;</span>
+                </span>
+              </div>
+              <div class="ring-cell">
+                <div class="ring-wrap">
+                  <div class="ring-outer" />
+                  <div class="ring-inner" />
+                  <div class="ring-dot" />
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner cta-center">
+      <div class="inner" data-reveal>
+        <h2 class="h-hero cta-heading">We're just getting started.</h2>
+        <p class="cta-copy">
+          Great products aren't built overnight. We're building software that continues to remove complexity across
+          industries.
+        </p>
+        <a href="/#products" class="btn btn-primary cta-btn">Explore Products</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 32px 140px;
+  }
+
+  .hero-grid {
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 64px;
+    align-items: center;
+  }
+
+  .eyebrow .dot.pulse {
+    animation: dexicPulse 4s ease-in-out infinite;
+  }
+
+  .lead {
+    margin: 32px 0 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    max-width: 560px;
+  }
+
+  .sub {
+    margin: 16px 0 0;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 560px;
+    text-wrap: pretty;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 44px;
+  }
+
+  .philosophy-lead {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--fg);
+    letter-spacing: -0.015em;
+    max-width: 560px;
+    text-wrap: pretty;
+  }
+
+  .products-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 48px;
+    margin-bottom: 64px;
+  }
+
+  .products-head-copy {
+    margin: 0;
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 420px;
+    text-align: right;
+  }
+
+  .products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .product-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .product-meta .rule {
+    width: 24px;
+    height: 1px;
+    background: var(--border-3);
+  }
+
+  .cta-heading {
+    font-size: 52px;
+  }
+
+  .cta-copy {
+    margin: 24px auto 0;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    text-wrap: pretty;
+  }
+
+  .cta-btn {
+    margin-top: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 80px 24px 90px;
+    }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .products-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .products-head-copy {
+      text-align: left;
+    }
+  }
+</style>

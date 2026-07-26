@@ -1,0 +1,127 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../assets/dexic-logo.png'
+
+interface Props {
+  active?: 'home' | 'product' | 'about' | 'contact' | 'legal'
+}
+
+const { active = 'home' } = Astro.props
+const productsActive = active === 'home' || active === 'product'
+const aboutActive = active === 'about'
+---
+
+<header class="site-header">
+  <div class="bar container">
+    <a href="/" class="logo-link" aria-label="Dexic home">
+      <Image src={logo} alt="Dexic" height={28} />
+    </a>
+    <nav class="nav">
+      <a href="/#products" class="nav-link" class:list={{ 'is-active': productsActive }}>
+        {productsActive && <span class="dot" aria-hidden="true"></span>}
+        <span>Products</span>
+      </a>
+      <a href="/about" class="nav-link" class:list={{ 'is-active': aboutActive }}>
+        {aboutActive && <span class="dot" aria-hidden="true"></span>}
+        <span>About</span>
+      </a>
+      <a href="/contact" class="nav-contact">Contact</a>
+    </nav>
+  </div>
+  <div class="progress-track">
+    <div id="dexic-progress" class="progress-bar"></div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 10, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bar {
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    flex: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+
+  .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link:hover,
+  .nav-link.is-active {
+    color: var(--fg);
+  }
+
+  .nav-link .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    animation: dexicFade 0.4s ease;
+  }
+
+  .nav-contact {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--fg);
+    letter-spacing: 0.01em;
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 8px 16px;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .nav-contact:hover {
+    border-color: var(--border-5);
+    background: #111111;
+    color: var(--fg);
+    transform: translateY(-1px);
+  }
+
+  .progress-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    will-change: transform;
+  }
+</style>

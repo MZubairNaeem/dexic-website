@@ -1,0 +1,180 @@
+---
+export const prerender = true
+
+import Layout from '../layouts/Layout.astro'
+import { FOCUS } from '../data/products'
+
+const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(2, '0') }))
+---
+
+<Layout
+  title="About Dexic — Engineering products with purpose."
+  description="Dexic exists to build products that remove complexity. We don't build software for clients — we build, own and continuously improve products that solve meaningful real-world problems."
+  active="about"
+>
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span>About</span>
+      </div>
+      <h1 class="h-hero hero-title">Engineering products with purpose.</h1>
+      <p class="hero-copy">
+        Dexic exists to build products that remove complexity. We don't build software for clients — we build, own
+        and continuously improve products that solve meaningful real-world problems.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <h2 class="h-sub">Technology should feel invisible.</h2>
+      <div class="text-col">
+        <p>
+          We believe technology should feel invisible. The best software isn't the one with the most features — it's
+          the one that makes difficult things feel simple.
+        </p>
+        <p>
+          Every product begins with a problem worth solving. Every engineering decision exists to make complex
+          systems feel effortless.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="eyebrow name-eyebrow">
+        <span class="dot"></span>
+        <span>The name</span>
+      </div>
+      <div class="name-grid">
+        <div class="name-cell">
+          <span class="letter accent">D</span>
+          <p class="word">Driving</p>
+          <p class="desc">Momentum over motion. We ship, then we keep going.</p>
+        </div>
+        <div class="name-cell">
+          <span class="letter">E</span>
+          <p class="word">Excellence in</p>
+          <p class="desc">A standard applied to the details nobody sees.</p>
+        </div>
+        <div class="name-cell">
+          <span class="letter">XI</span>
+          <p class="word">Xperiences, Innovation</p>
+          <p class="desc">Interfaces people trust, built on ideas that hold up.</p>
+        </div>
+        <div class="name-cell">
+          <span class="letter">C</span>
+          <p class="word">and Commitment</p>
+          <p class="desc">We own what we build, for as long as it's useful.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner split" data-reveal>
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          <span>Focus</span>
+        </div>
+        <h2 class="h-sub">What we work on.</h2>
+      </div>
+      <div class="numbered-list no-margin">
+        {
+          focusRows.map((f) => (
+            <div class="numbered-row">
+              <span class="num">{f.num}</span>
+              <span class="label full">{f.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner cta-center">
+      <h2 class="h-hero cta-heading">We're builders first.</h2>
+      <p class="cta-copy">We're committed to solving problems worth solving.</p>
+      <a href="/#products" class="btn btn-primary cta-btn">Explore Products</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 32px 100px;
+  }
+
+  .hero-title {
+    max-width: 900px;
+    font-size: 64px;
+  }
+
+  .hero-copy {
+    margin: 34px 0 0;
+    max-width: 620px;
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: 600px;
+  }
+
+  .text-col p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .name-eyebrow {
+    margin-bottom: 44px;
+  }
+
+  .numbered-row .label.full {
+    font-size: 18px;
+    color: var(--fg);
+    padding-top: 1px;
+  }
+
+  .numbered-row .num {
+    padding-top: 4px;
+  }
+
+  .cta-heading {
+    font-size: 52px;
+  }
+
+  .cta-copy {
+    margin: 22px auto 0;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+  }
+
+  .cta-btn {
+    margin-top: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 80px 24px 70px;
+    }
+    .hero-title {
+      font-size: 42px;
+    }
+  }
+</style>
