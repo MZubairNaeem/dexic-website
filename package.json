@@ -11,7 +11,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/node": "^9.4.3",
+    "@astrojs/vercel": "9.0.5",
     "astro": "^5.15.5",
     "nodemailer": "^7.0.9",
     "pg": "^8.22.0"
