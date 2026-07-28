@@ -14,7 +14,8 @@ const aboutActive = active === 'about'
 <header class="site-header">
   <div class="bar container">
     <a href="/" class="logo-link" aria-label="Dexic home">
-      <Image src={logo} alt="Dexic" height={28} />
+      <Image src={logo} alt="Dexic" height={28} class="logo-full" />
+      <img src="/D.png" alt="Dexic" height="28" class="logo-mobile" />
     </a>
     <nav class="nav">
       <a href="/#products" class="nav-link" class:list={{ 'is-active': productsActive }}>
@@ -55,6 +56,20 @@ const aboutActive = active === 'about'
     display: flex;
     align-items: center;
     flex: none;
+  }
+
+  .logo-mobile {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .logo-full {
+      display: none;
+    }
+
+    .logo-mobile {
+      display: block;
+    }
   }
 
   .nav {
