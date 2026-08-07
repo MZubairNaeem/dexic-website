@@ -29,6 +29,12 @@ import logo from '../assets/dexic-logo.png'
       <a href="/refund-policy">Refund Policy</a>
       <a href="/terms-and-conditions">Terms &amp; Conditions</a>
     </div>
+    <div class="col">
+      <span class="col-title">Contact</span>
+      <a href="mailto:contact@dexic.tech">contact@dexic.tech</a>
+      <a href="tel:+923058688545">0305-8688545</a>
+      <span class="address">Commercial #1, The Fifth Plaza, Naval Anchorage</span>
+    </div>
   </div>
   <div class="container bottom">
     <span>&copy; {new Date().getFullYear()} Dexic. All rights reserved.</span>
@@ -44,7 +50,7 @@ import logo from '../assets/dexic-logo.png'
   .top {
     padding: 72px 32px 40px;
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 0.6fr));
+    grid-template-columns: minmax(0, 1.1fr) repeat(4, minmax(0, 0.6fr));
     gap: 40px;
   }
 
@@ -82,6 +88,12 @@ import logo from '../assets/dexic-logo.png'
     color: var(--fg);
   }
 
+  .address {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
   .bottom {
     padding: 28px 32px 44px;
     border-top: 1px solid #141414;
@@ -97,7 +109,7 @@ import logo from '../assets/dexic-logo.png'
 
   @media (max-width: 900px) {
     .top {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       row-gap: 40px;
     }
   }
