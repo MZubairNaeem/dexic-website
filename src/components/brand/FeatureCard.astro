@@ -1,0 +1,193 @@
+---
+// White rounded card: icon tile, small coloured number, bold title,
+// muted subtitle and a tiny hollow circle. Lifts and wobbles on hover.
+import Icon from './Icon.astro'
+import type { IconName } from './icons'
+
+interface Props {
+  title: string
+  text?: string
+  num?: string
+  icon?: IconName
+  tone?: 'lime' | 'violet' | 'ink'
+  rotate?: number
+  size?: 'sm' | 'md'
+  heading?: 'h3' | 'p'
+  clamp?: boolean
+  class?: string
+  style?: string
+}
+
+const {
+  title,
+  text,
+  num,
+  icon = 'sparkles',
+  tone = 'lime',
+  rotate = 0,
+  size = 'md',
+  heading: Heading = 'p',
+  clamp = false,
+  class: className,
+  style = '',
+  ...rest
+} = Astro.props
+---
+
+<div
+  class:list={['fcard', `fcard--${tone}`, `fcard--${size}`, { 'fcard--clamp': clamp }, className]}
+  style={`--r:${rotate}deg;${style}`}
+  {...rest}
+>
+  <span class="fcard-tile" aria-hidden="true"><Icon name={icon} strokeWidth={2} /></span>
+  <span class="fcard-body">
+    {num && <span class="fcard-num">{num}</span>}
+    <Heading class="fcard-title">{title}</Heading>
+    {text && <span class="fcard-text">{text}</span>}
+  </span>
+  <span class="fcard-ring" aria-hidden="true"></span>
+</div>
+
+<style>
+  .fcard {
+    --tile: 54px;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--tile) minmax(0, 1fr) 14px;
+    align-items: start;
+    gap: 16px;
+    padding: 18px 18px 20px;
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    color: var(--fg);
+    transform: rotate(var(--r, 0deg));
+    transition:
+      transform 0.45s var(--ease-spring),
+      box-shadow 0.3s ease;
+  }
+
+  .fcard:hover {
+    transform: translateY(-6px) rotate(calc(var(--r, 0deg) * -0.6));
+    box-shadow: var(--shadow-lift);
+  }
+
+  .fcard--sm {
+    --tile: 46px;
+    gap: 13px;
+    padding: 14px 14px 15px;
+    border-radius: 16px;
+  }
+
+  .fcard-tile {
+    display: grid;
+    place-items: center;
+    width: var(--tile);
+    height: var(--tile);
+    border-radius: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .fcard--sm .fcard-tile {
+    border-radius: 12px;
+  }
+
+  .fcard-tile :global(svg) {
+    width: 46%;
+    height: 46%;
+  }
+
+  .fcard:hover .fcard-tile {
+    animation: dexicWobble 0.7s ease;
+  }
+
+  .fcard--lime .fcard-tile {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .fcard--violet .fcard-tile {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .fcard--ink .fcard-tile {
+    background: var(--ink);
+    color: var(--lime);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .fcard-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .fcard-num {
+    margin-bottom: 4px;
+    padding: 0 2px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+    color: var(--mark-text);
+    background: linear-gradient(transparent 55%, var(--mark-bg) 55%, var(--mark-bg) 92%, transparent 92%);
+  }
+
+  .fcard--violet .fcard-num {
+    padding: 0;
+    color: var(--violet-text);
+    background: none;
+  }
+
+  .fcard-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .fcard--sm .fcard-title {
+    font-size: 15.5px;
+  }
+
+  .fcard-text {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .fcard--sm .fcard-text {
+    margin-top: 4px;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .fcard--clamp .fcard-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .fcard-ring {
+    width: 14px;
+    height: 14px;
+    margin-top: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .fcard:hover .fcard-ring {
+    background: var(--lime);
+    border-color: var(--lime);
+  }
+</style>

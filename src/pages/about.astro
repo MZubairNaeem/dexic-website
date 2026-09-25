@@ -2,9 +2,23 @@
 export const prerender = true
 
 import Layout from '../layouts/Layout.astro'
+import Highlight from '../components/brand/Highlight.astro'
+import Sparks from '../components/brand/Sparks.astro'
+import Annotation from '../components/brand/Annotation.astro'
+import ArrowButton from '../components/brand/ArrowButton.astro'
+import SectionCounter from '../components/brand/SectionCounter.astro'
+import PillList from '../components/brand/PillList.astro'
+import CalloutBand from '../components/brand/CalloutBand.astro'
+import CornerLabels from '../components/brand/CornerLabels.astro'
+import Watermark from '../components/brand/Watermark.astro'
 import { FOCUS } from '../data/products'
 
-const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(2, '0') }))
+const NAME = [
+  { letter: 'D', word: 'Driving', desc: 'Momentum over motion. We ship, then we keep going.', tone: 'lime', rotate: -2 },
+  { letter: 'E', word: 'Excellence in', desc: 'A standard applied to the details nobody sees.', tone: 'paper', rotate: 1.5 },
+  { letter: 'XI', word: 'Xperiences, Innovation', desc: 'Interfaces people trust, built on ideas that hold up.', tone: 'violet', rotate: -1 },
+  { letter: 'C', word: 'and Commitment', desc: "We own what we build, for as long as it's useful.", tone: 'ink', rotate: 2 }
+]
 ---
 
 <Layout
@@ -12,29 +26,47 @@ const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(
   description="Dexic exists to build products that remove complexity. We don't build software for clients — we build, own and continuously improve products that solve meaningful real-world problems."
   active="about"
 >
-  <section class="hero">
-    <div class="container">
-      <div class="eyebrow">
-        <span class="dot"></span>
-        <span>About</span>
+  <section class="page-hero about-hero has-grid">
+    <div class="container about-grid">
+      <div class="about-copy">
+        <span class="kicker">About</span>
+        <h1 class="page-title about-title">
+          <span class="line shout about-shout">Engineering</span>
+          <span class="line">products with</span>
+          <span class="line"><Highlight variant="block" rotate={-1.5} delay={300}>purpose.</Highlight></span>
+        </h1>
+        <p class="body-lg page-copy">
+          Dexic exists to build products that remove complexity. We don't build software for clients — we build, own
+          and continuously improve products that solve meaningful real-world problems.
+        </p>
       </div>
-      <h1 class="h-hero hero-title">Engineering products with purpose.</h1>
-      <p class="hero-copy">
-        Dexic exists to build products that remove complexity. We don't build software for clients — we build, own
-        and continuously improve products that solve meaningful real-world problems.
-      </p>
+
+      <div class="typestack" aria-hidden="true">
+        <span class="ts ts-build shout">Build,</span>
+        <span class="ts ts-own serif-it lime-word">own</span>
+        <span class="ts ts-improve shout"
+          ><span class="spark-anchor"
+            ><Highlight variant="block" rotate={2} delay={700}>&amp; improve.</Highlight><Sparks
+              size={56}
+              rotate={-8}
+              delay={1200}
+            /></span
+          ></span
+        >
+        <Annotation text="the whole business model" arrow="up-right" rotate={-4} delay={1000} class="ts-anno" />
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="section-inner split" data-reveal>
-      <h2 class="h-sub">Technology should feel invisible.</h2>
+      <h2 class="h-sub invisible-title">Technology should feel <span class="ghost">invisible.</span></h2>
       <div class="text-col">
-        <p>
+        <p class="body-lg">
           We believe technology should feel invisible. The best software isn't the one with the most features — it's
           the one that makes difficult things feel simple.
         </p>
-        <p>
+        <p class="body-lg">
           Every product begins with a problem worth solving. Every engineering decision exists to make complex
           systems feel effortless.
         </p>
@@ -42,52 +74,19 @@ const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(
     </div>
   </section>
 
-  <section class="section">
+  <section class="section name-section has-grid">
+    <Watermark text="DEXIC" class="name-watermark" />
     <div class="section-inner">
-      <div class="eyebrow name-eyebrow">
-        <span class="dot"></span>
-        <span>The name</span>
-      </div>
+      <SectionCounter num={1} label="The name" />
       <div class="name-grid">
-        <div class="name-cell">
-          <span class="letter accent">D</span>
-          <p class="word">Driving</p>
-          <p class="desc">Momentum over motion. We ship, then we keep going.</p>
-        </div>
-        <div class="name-cell">
-          <span class="letter">E</span>
-          <p class="word">Excellence in</p>
-          <p class="desc">A standard applied to the details nobody sees.</p>
-        </div>
-        <div class="name-cell">
-          <span class="letter">XI</span>
-          <p class="word">Xperiences, Innovation</p>
-          <p class="desc">Interfaces people trust, built on ideas that hold up.</p>
-        </div>
-        <div class="name-cell">
-          <span class="letter">C</span>
-          <p class="word">and Commitment</p>
-          <p class="desc">We own what we build, for as long as it's useful.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-inner split" data-reveal>
-      <div>
-        <div class="eyebrow">
-          <span class="dot"></span>
-          <span>Focus</span>
-        </div>
-        <h2 class="h-sub">What we work on.</h2>
-      </div>
-      <div class="numbered-list no-margin">
         {
-          focusRows.map((f) => (
-            <div class="numbered-row">
-              <span class="num">{f.num}</span>
-              <span class="label full">{f.label}</span>
+          NAME.map((cell, i) => (
+            <div class="name-item" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <div class={`name-card name-card--${cell.tone}`} style={`--r:${cell.rotate}deg`}>
+                <span class="letter">{cell.letter}</span>
+                <p class="word">{cell.word}</p>
+                <p class="desc">{cell.desc}</p>
+              </div>
             </div>
           ))
         }
@@ -98,61 +97,148 @@ const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(
   <section class="section">
     <div class="section-inner split" data-reveal>
       <div>
-        <div class="eyebrow">
-          <span class="dot"></span>
-          <span>Business model</span>
-        </div>
-        <h2 class="h-sub">How Dexic works.</h2>
+        <SectionCounter num={2} label="Focus" />
+        <h2 class="h-section serif">What we <Highlight variant="brush" delay={150}>work on.</Highlight></h2>
+      </div>
+      <PillList items={FOCUS} />
+    </div>
+  </section>
+
+  <section class="section has-grid">
+    <div class="section-inner split" data-reveal>
+      <div class="bm-head">
+        <SectionCounter num={3} label="Business model" />
+        <h2 class="h-section serif">
+          How Dexic <span class="spark-anchor"
+            ><Highlight variant="block" rotate={-1.5} delay={150}>works.</Highlight><Sparks size={50} delay={600} /></span
+          >
+        </h2>
+        <Annotation text="no ads. no data resale." arrow="right" rotate={-5} delay={400} class="bm-anno" />
       </div>
       <div class="text-col">
-        <p>
+        <p class="body-lg">
           Dexic is a product studio, not a services agency. We don't build software to order for clients — instead,
           we design, build, and own a portfolio of software products, each created to solve a specific, real-world
           problem, and each maintained and improved on an ongoing basis after launch.
         </p>
-        <p>
+        <p class="body-lg">
           Every product is billed directly to its own customers, in PKR, through recurring subscriptions and
           one-time payments — plan billing, upgrades, and add-ons for tools like StacShip and TableSnap, and optional
           case-linked donations for Woofy. Payments are accepted via card and local mobile wallets (EasyPaisa and
           JazzCash), so customers can pay however they already transact.
         </p>
-        <p>
+        <p class="body-lg">
           Revenue comes entirely from these product relationships — there is no client services, ad, or
           data-resale revenue line. As each product grows, the same team keeps designing, engineering, and supporting
           it directly, rather than handing it off once it ships.
         </p>
       </div>
     </div>
+    <CornerLabels items={['Ideas', 'Products', 'People', 'Impact']} class="bm-corner" />
   </section>
 
   <section class="section">
-    <div class="section-inner cta-center">
-      <h2 class="h-hero cta-heading">We're builders first.</h2>
-      <p class="cta-copy">We're committed to solving problems worth solving.</p>
-      <a href="/#products" class="btn btn-primary cta-btn">Explore Products</a>
+    <div class="section-inner cta-inner">
+      <CalloutBand lead="We're builders first." corner={['Build', 'Own', 'Improve']}>
+        <p>We're committed to solving problems worth solving.</p>
+        <ArrowButton href="/#products" label="Explore Products" onDark />
+      </CalloutBand>
     </div>
   </section>
 </Layout>
 
 <style>
-  .hero {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 32px 100px;
+  /* ---------- Hero ---------- */
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
   }
 
-  .hero-title {
-    max-width: 900px;
-    font-size: 64px;
+  .about-title {
+    font-size: clamp(50px, 6.6vw, 104px);
   }
 
-  .hero-copy {
-    margin: 34px 0 0;
-    max-width: 620px;
-    font-size: 19px;
-    line-height: 1.6;
-    color: var(--muted);
-    text-wrap: pretty;
+  .about-shout {
+    font-size: 1.12em;
+    line-height: 0.92;
+    letter-spacing: 0.005em;
+  }
+
+  .page-copy {
+    max-width: 580px;
+  }
+
+  .typestack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 0 96px;
+    line-height: 0.86;
+  }
+
+  .ts {
+    display: block;
+  }
+
+  .ts-build {
+    font-size: clamp(84px, 11vw, 172px);
+    color: var(--fg);
+  }
+
+  .ts-own {
+    margin: -0.08em 0 0 0.9em;
+    font-size: clamp(96px, 12.5vw, 196px);
+    line-height: 0.95;
+  }
+
+  .ts-improve {
+    margin-top: 0.14em;
+    font-size: clamp(48px, 6vw, 92px);
+    align-self: flex-end;
+  }
+
+  .typestack :global(.ts-anno) {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  :global(html.motion) .ts {
+    animation: dexicRise 1s var(--ease-out) both;
+  }
+
+  :global(html.motion) .ts-own {
+    animation-delay: 150ms;
+  }
+
+  :global(html.motion) .ts-improve {
+    animation-delay: 300ms;
+  }
+
+  @media (max-width: 1024px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .typestack {
+      padding-bottom: 88px;
+    }
+  }
+
+  /* ---------- Invisible ---------- */
+
+  .invisible-title {
+    font-size: clamp(36px, 4.6vw, 66px);
+    font-weight: 900;
+  }
+
+  .ghost {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--fg);
   }
 
   .text-col {
@@ -162,49 +248,140 @@ const focusRows = FOCUS.map((label, i) => ({ label, num: String(i + 1).padStart(
     max-width: 600px;
   }
 
-  .text-col p {
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.6;
+  /* ---------- The name ---------- */
+
+  .name-section :global(.name-watermark) {
+    left: 50%;
+    bottom: -0.08em;
+    translate: -50% 0;
+    --wm-font: clamp(160px, 30vw, 460px);
+  }
+
+  .name-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .name-item {
+    display: flex;
+  }
+
+  .name-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 26px 30px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    transform: rotate(var(--r));
+    transition:
+      transform 0.5s var(--ease-spring),
+      box-shadow 0.3s ease;
+  }
+
+  .name-card:hover {
+    transform: translateY(-8px) rotate(calc(var(--r) * -0.8));
+    box-shadow: var(--shadow-lift);
+  }
+
+  .name-card:hover .letter {
+    animation: dexicWobble 0.7s ease;
+  }
+
+  .letter {
+    display: grid;
+    place-items: center;
+    min-width: 84px;
+    height: 84px;
+    padding: 0 14px;
+    border-radius: 22px;
+    font-family: var(--font-shout);
+    font-size: 50px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .name-card--lime .letter {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .name-card--paper .letter {
+    background: var(--soft);
+    color: var(--fg);
+  }
+
+  .name-card--violet .letter {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .name-card--ink .letter {
+    background: var(--ink);
+    color: var(--lime);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .word {
+    margin: 26px 0 0;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+  }
+
+  .desc {
+    margin: 10px 0 0;
+    font-size: 15px;
+    line-height: 1.55;
     color: var(--muted);
     text-wrap: pretty;
   }
 
-  .name-eyebrow {
-    margin-bottom: 44px;
+  @media (max-width: 1024px) {
+    .name-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
-  .numbered-row .label.full {
-    font-size: 18px;
-    color: var(--fg);
-    padding-top: 1px;
+  @media (max-width: 560px) {
+    .name-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
-  .numbered-row .num {
-    padding-top: 4px;
-  }
+  /* ---------- Business model ---------- */
 
-  .cta-heading {
-    font-size: 52px;
-  }
-
-  .cta-copy {
-    margin: 22px auto 0;
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 480px;
-  }
-
-  .cta-btn {
+  .bm-head :global(.bm-anno) {
     margin-top: 40px;
   }
 
+  .section :global(.bm-corner) {
+    position: absolute;
+    left: var(--edge);
+    bottom: clamp(32px, 5vw, 56px);
+  }
+
+  @media (max-width: 1024px) {
+    .section :global(.bm-corner) {
+      display: none;
+    }
+  }
+
   @media (max-width: 900px) {
-    .hero {
-      padding: 80px 24px 70px;
+    .bm-head :global(.bm-anno) {
+      display: none;
     }
-    .hero-title {
-      font-size: 42px;
-    }
+  }
+
+  /* ---------- CTA ---------- */
+
+  .cta-inner {
+    padding-top: clamp(32px, 4vw, 56px);
   }
 </style>

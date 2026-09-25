@@ -1,0 +1,117 @@
+---
+// Lime dot cursor that grows into a highlighter over interactive elements.
+// Only on fine pointers with motion allowed; touch devices keep the default.
+---
+
+<div class="cursor" aria-hidden="true"><span class="cursor-dot"></span></div>
+
+<script>
+  const HOVERABLE = 'a, button, summary, [role="button"], [data-cursor="grow"]'
+  const TEXTUAL = 'input, textarea, select, [contenteditable="true"]'
+
+  function initCursor() {
+    const el = document.querySelector<HTMLElement>('.cursor')
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!el || !fine || reduced) return
+
+    document.documentElement.classList.add('has-cursor')
+    let x = 0
+    let y = 0
+    let frame = 0
+
+    const render = () => {
+      frame = 0
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`
+    }
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (e.pointerType !== 'mouse') return
+        x = e.clientX
+        y = e.clientY
+        el.classList.add('is-visible')
+        if (!frame) frame = requestAnimationFrame(render)
+      },
+      { passive: true }
+    )
+
+    document.addEventListener('pointerover', (e) => {
+      if (!(e.target instanceof Element)) return
+      const textual = e.target.closest(TEXTUAL) !== null
+      el.classList.toggle('is-text', textual)
+      el.classList.toggle('is-hover', !textual && e.target.closest(HOVERABLE) !== null)
+    })
+
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget) el.classList.remove('is-visible')
+    })
+    window.addEventListener('pointerdown', () => el.classList.add('is-down'))
+    window.addEventListener('pointerup', () => el.classList.remove('is-down'))
+  }
+
+  initCursor()
+</script>
+
+<style>
+  .cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  .cursor.is-visible {
+    opacity: 1;
+  }
+
+  .cursor.is-hover {
+    mix-blend-mode: var(--cursor-blend);
+  }
+
+  .cursor-dot {
+    position: absolute;
+    left: -7px;
+    top: -7px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 0 1.5px var(--ink);
+    transition:
+      transform 0.35s var(--ease-spring),
+      box-shadow 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .cursor.is-hover .cursor-dot {
+    transform: scale(3.6);
+    box-shadow: none;
+  }
+
+  .cursor.is-down .cursor-dot {
+    transform: scale(0.75);
+  }
+
+  .cursor.is-hover.is-down .cursor-dot {
+    transform: scale(3.1);
+  }
+
+  .cursor.is-text .cursor-dot {
+    opacity: 0;
+  }
+
+  :global(html.has-cursor),
+  :global(html.has-cursor *) {
+    cursor: none !important;
+  }
+
+  :global(html.has-cursor :is(input, textarea, select, [contenteditable='true'])) {
+    cursor: auto !important;
+  }
+</style>

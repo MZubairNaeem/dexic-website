@@ -1,0 +1,47 @@
+---
+// "→ LABEL ———" button: lime circle with an arrow, tracked label, thin line.
+// Renders <a> with href, <button> without, or a static <span> inside link cards.
+import Icon from './Icon.astro'
+
+interface Props {
+  label: string
+  href?: string
+  type?: 'button' | 'submit'
+  variant?: 'lime' | 'ghost'
+  size?: 'md' | 'sm'
+  external?: boolean
+  onDark?: boolean
+  line?: boolean
+  static?: boolean
+  class?: string
+}
+
+const {
+  label,
+  href,
+  type = 'button',
+  variant = 'lime',
+  size = 'md',
+  external = false,
+  onDark = false,
+  line = true,
+  static: isStatic = false,
+  class: className,
+  ...rest
+} = Astro.props
+
+const Tag = isStatic ? 'span' : href ? 'a' : 'button'
+---
+
+<Tag
+  href={Tag === 'a' ? href : undefined}
+  type={Tag === 'button' ? type : undefined}
+  target={Tag === 'a' && external ? '_blank' : undefined}
+  rel={Tag === 'a' && external ? 'noopener' : undefined}
+  class:list={['cta', { 'cta--ghost': variant === 'ghost', 'cta--sm': size === 'sm', 'cta--on-dark': onDark }, className]}
+  {...rest}
+>
+  <span class="cta-dot" aria-hidden="true"><Icon name={external ? 'arrow-up-right' : 'arrow-right'} strokeWidth={2.2} /></span>
+  <span class="cta-label">{label}</span>
+  {line && <span class="cta-line" aria-hidden="true" />}
+</Tag>

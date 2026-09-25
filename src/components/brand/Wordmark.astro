@@ -1,0 +1,96 @@
+---
+// "Dexic." — bold sans with a lime dot, plus an optional tracked tagline
+// that starts with a short lime line.
+interface Props {
+  href?: string
+  size?: 'sm' | 'md' | 'lg'
+  tagline?: string | false
+  class?: string
+}
+
+const { href, size = 'md', tagline = 'Build • Execute • Initiate', class: className, ...rest } = Astro.props
+const Tag = href ? 'a' : 'div'
+---
+
+<Tag
+  href={href}
+  class:list={['wordmark', `wordmark--${size}`, className]}
+  aria-label={href ? 'Dexic home' : undefined}
+  {...rest}
+>
+  <span class="wm-name">Dexic<span class="wm-dot" aria-hidden="true"></span></span>
+  {
+    tagline && (
+      <span class="wm-tag" aria-hidden="true">
+        <span class="wm-line" />
+        {tagline}
+      </span>
+    )
+  }
+</Tag>
+
+<style>
+  .wordmark {
+    --wm-size: 34px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--wm-size) * 0.28);
+    color: var(--fg);
+    line-height: 1;
+  }
+
+  .wordmark--sm {
+    --wm-size: 27px;
+  }
+
+  .wordmark--lg {
+    --wm-size: clamp(48px, 6vw, 72px);
+  }
+
+  .wm-name {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-sans);
+    font-size: var(--wm-size);
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    line-height: 0.9;
+  }
+
+  .wm-dot {
+    width: 0.25em;
+    height: 0.25em;
+    margin-left: 0.07em;
+    border-radius: 50%;
+    background: var(--lime);
+    transition: transform 0.4s var(--ease-spring);
+  }
+
+  a.wordmark:hover .wm-dot {
+    transform: translateY(-0.12em) scale(1.25);
+  }
+
+  .wm-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: max(9px, calc(var(--wm-size) * 0.17));
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .wm-line {
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--lime);
+  }
+
+  .wordmark--sm .wm-tag {
+    font-size: 8.5px;
+    letter-spacing: 0.28em;
+  }
+</style>

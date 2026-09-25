@@ -1,0 +1,770 @@
+---
+// Abstract phone-screen mockup of a product UI, drawn in CSS/SVG.
+// Placeholder art: swap for real product screenshots when available.
+// Everything is sized in em, so `size` (px per em) scales the whole device.
+import Icon from './Icon.astro'
+import { brandFor } from '../../data/brand'
+
+interface Props {
+  slug: string
+  size?: number
+  class?: string
+  style?: string
+}
+
+const { slug, size = 9, class: className, style = '', ...rest } = Astro.props
+const brand = brandFor(slug)
+
+// Deterministic QR-like pattern for the TableSnap screen.
+const QR = 13
+const inFinder = (x: number, y: number) =>
+  (x < 4 && y < 4) || (x >= QR - 4 && y < 4) || (x < 4 && y >= QR - 4)
+let seed = 11
+const rand = () => {
+  seed = (seed * 16807) % 2147483647
+  return seed / 2147483647
+}
+const qrCells: [number, number][] = []
+for (let y = 0; y < QR; y++) {
+  for (let x = 0; x < QR; x++) {
+    if (!inFinder(x, y) && rand() > 0.52) qrCells.push([x, y])
+  }
+}
+const finders: [number, number][] = [
+  [0, 0],
+  [QR - 3, 0],
+  [0, QR - 3]
+]
+
+const bars = [38, 60, 46, 72, 54, 80, 66, 94]
+---
+
+<div
+  class:list={['ps', `ps--${slug}`, className]}
+  style={`font-size:var(--ps-size, ${size}px);${style}`}
+  aria-hidden="true"
+  {...rest}
+>
+  <div class="ps-screen">
+    <div class="ps-status">
+      <span>9:41</span>
+      <span class="ps-notch"></span>
+      <span class="ps-signal"><i></i><i></i><i></i></span>
+    </div>
+
+    {
+      slug === 'stacship' && (
+        <div class="ps-body">
+          <div class="ps-head">
+            <span class={`ps-tile ps-tile--${brand.tone}`}>
+              <Icon name={brand.icon} strokeWidth={2.2} />
+            </span>
+            <span class="ps-app">StacShip</span>
+            <span class="ps-pill ps-pill--lime">prod</span>
+          </div>
+          <span class="ps-kicker">Deploy · main</span>
+          <ul class="ps-steps">
+            <li>
+              <span class="ps-check">
+                <Icon name="check" strokeWidth={3} />
+              </span>
+              Build<span class="ps-meta">0:42</span>
+            </li>
+            <li>
+              <span class="ps-check">
+                <Icon name="check" strokeWidth={3} />
+              </span>
+              Release
+            </li>
+            <li>
+              <span class="ps-check">
+                <Icon name="check" strokeWidth={3} />
+              </span>
+              TLS certificate
+            </li>
+            <li class="is-live">
+              <span class="ps-live" />
+              Live<span class="ps-meta">production</span>
+            </li>
+          </ul>
+          <div class="ps-chart">
+            {bars.map((h) => (
+              <i style={`height:${h}%`} />
+            ))}
+          </div>
+          <div class="ps-actions">
+            <span>Logs</span>
+            <span class="is-solid">Rollback</span>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      slug === 'tablesnap' && (
+        <div class="ps-body">
+          <div class="ps-head">
+            <span class={`ps-tile ps-tile--${brand.tone}`}>
+              <Icon name={brand.icon} strokeWidth={2.2} />
+            </span>
+            <span class="ps-app">TableSnap</span>
+            <span class="ps-pill ps-pill--rec">
+              <i />
+              Rec
+            </span>
+          </div>
+          <span class="ps-prompt">What made tonight great?</span>
+          <div class="ps-finder">
+            <span class="ps-corner ps-corner--tl" />
+            <span class="ps-corner ps-corner--tr" />
+            <span class="ps-corner ps-corner--bl" />
+            <span class="ps-corner ps-corner--br" />
+            <svg class="ps-qr" viewBox={`-0.5 -0.5 ${QR + 1} ${QR + 1}`}>
+              {qrCells.map(([x, y]) => (
+                <rect x={x + 0.08} y={y + 0.08} width="0.84" height="0.84" rx="0.18" />
+              ))}
+              {finders.map(([x, y]) => (
+                <>
+                  <rect x={x + 0.35} y={y + 0.35} width="2.3" height="2.3" rx="0.5" class="qr-ring" />
+                  <rect x={x + 1.05} y={y + 1.05} width="0.9" height="0.9" rx="0.2" />
+                </>
+              ))}
+            </svg>
+            <span class="ps-scanline" />
+          </div>
+          <div class="ps-rec-row">
+            <span class="ps-timer">00:24</span>
+            <span class="ps-rec">
+              <i />
+            </span>
+            <span class="ps-hint">Scan to record</span>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      slug === 'woofy' && (
+        <div class="ps-body ps-body--map">
+          <svg class="ps-map" viewBox="0 0 186 386" preserveAspectRatio="xMidYMid slice">
+            <rect width="186" height="386" class="map-bg" />
+            <rect x="12" y="40" width="58" height="62" rx="8" class="map-block" />
+            <rect x="96" y="30" width="72" height="44" rx="8" class="map-block" />
+            <rect x="110" y="96" width="62" height="70" rx="8" class="map-park" />
+            <rect x="8" y="128" width="70" height="80" rx="8" class="map-block" />
+            <rect x="100" y="196" width="76" height="58" rx="8" class="map-block" />
+            <rect x="14" y="236" width="56" height="70" rx="8" class="map-block" />
+            <path d="M-10 118C40 110 70 126 100 112S160 84 200 92" class="map-road" />
+            <path d="M84 -10C92 60 76 120 90 190S96 300 80 400" class="map-road" />
+            <path d="M-10 222C50 214 120 236 200 180" class="map-road map-road--thin" />
+          </svg>
+          <div class="ps-search">
+            <Icon name="map-pin" strokeWidth={2.2} />
+            Nearby cases
+            <span class="ps-count">3</span>
+          </div>
+          <span class="ps-radius" />
+          <span class="ps-pin">
+            <Icon name="paw" strokeWidth={2.2} />
+          </span>
+          <span class="ps-dot ps-dot--a" />
+          <span class="ps-dot ps-dot--b" />
+          <span class="ps-dot ps-dot--c" />
+          <div class="ps-sheet">
+            <span class="ps-handle" />
+            <div class="ps-sheet-row">
+              <span class="ps-tile ps-tile--violet">
+                <Icon name="paw" strokeWidth={2.2} />
+              </span>
+              <span class="ps-sheet-text">
+                <b>Case claimed</b>
+                <span>Rescuer on the way</span>
+              </span>
+              <span class="ps-pill ps-pill--lime">Live</span>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .ps {
+    position: relative;
+    width: 20em;
+    height: 40em;
+    padding: 0.7em;
+    border-radius: 3.3em;
+    background: var(--ink);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.07),
+      inset 0 0 0 0.14em rgba(255, 255, 255, 0.14),
+      0 2.6em 5em rgba(0, 0, 0, 0.2),
+      0 0.6em 1.4em rgba(0, 0, 0, 0.12);
+    font-family: var(--font-sans);
+    line-height: 1.2;
+    user-select: none;
+  }
+
+  .ps-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 2.65em;
+    background: #fafaf7;
+    color: var(--ink);
+  }
+
+  .ps--stacship .ps-screen {
+    background: #121212;
+    color: #f2f2ee;
+  }
+
+  /* status bar */
+  .ps-status {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.8em;
+    padding: 0 1.9em;
+    font-size: 1em;
+    font-weight: 800;
+  }
+
+  .ps-notch {
+    position: absolute;
+    left: 50%;
+    top: 0.7em;
+    width: 5.6em;
+    height: 1.6em;
+    margin-left: -2.8em;
+    border-radius: 1em;
+    background: var(--ink);
+  }
+
+  .ps-signal {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.18em;
+    height: 0.9em;
+  }
+
+  .ps-signal i {
+    width: 0.26em;
+    border-radius: 0.1em;
+    background: currentColor;
+  }
+
+  .ps-signal i:nth-child(1) {
+    height: 45%;
+  }
+
+  .ps-signal i:nth-child(2) {
+    height: 70%;
+  }
+
+  .ps-signal i:nth-child(3) {
+    height: 100%;
+  }
+
+  .ps-body {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8em 1.4em 1.4em;
+  }
+
+  .ps-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+  }
+
+  .ps-tile {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.7em;
+    height: 2.7em;
+    border-radius: 0.8em;
+  }
+
+  .ps-tile :global(svg) {
+    width: 1.35em;
+    height: 1.35em;
+  }
+
+  .ps-tile--ink {
+    background: #000;
+    color: var(--lime);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  }
+
+  .ps-tile--lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .ps-tile--violet {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .ps-app {
+    flex: 1;
+    font-size: 1.45em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .ps-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.35em 0.75em;
+    border-radius: 1em;
+    font-size: 0.85em;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ps-pill--lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .ps-pill--rec {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .ps-pill--rec i {
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    background: var(--lime);
+    animation: dexicPulse 1.6s ease-in-out infinite;
+  }
+
+  /* StacShip */
+  .ps-kicker {
+    margin-top: 1.9em;
+    font-size: 0.88em;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(242, 242, 238, 0.5);
+  }
+
+  .ps-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin: 0.9em 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ps-steps li {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 0.72em 0.85em;
+    border-radius: 1em;
+    background: #1d1d1d;
+    font-size: 1.12em;
+    font-weight: 700;
+  }
+
+  .ps-steps li.is-live {
+    background: rgba(212, 245, 30, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(212, 245, 30, 0.35);
+  }
+
+  .ps-check {
+    display: grid;
+    place-items: center;
+    width: 1.45em;
+    height: 1.45em;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .ps-check :global(svg) {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  .ps-live {
+    position: relative;
+    width: 1.45em;
+    height: 1.45em;
+    display: grid;
+    place-items: center;
+  }
+
+  .ps-live::before,
+  .ps-live::after {
+    content: '';
+    position: absolute;
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+
+  .ps-live::after {
+    animation: dexicHalo 1.8s ease-out infinite;
+  }
+
+  .ps-meta {
+    margin-left: auto;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: rgba(242, 242, 238, 0.45);
+  }
+
+  .ps-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.55em;
+    height: 6em;
+    margin-top: 1.5em;
+    padding: 0.8em;
+    border-radius: 1em;
+    background: #1a1a1a;
+  }
+
+  .ps-chart i {
+    flex: 1;
+    border-radius: 0.3em;
+    background: #343434;
+  }
+
+  .ps-chart i:last-child {
+    background: var(--lime);
+  }
+
+  .ps-actions {
+    display: flex;
+    gap: 0.6em;
+    margin-top: auto;
+  }
+
+  .ps-actions span {
+    flex: 1;
+    padding: 0.8em 0;
+    border-radius: 1.2em;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    text-align: center;
+    font-size: 1em;
+    font-weight: 800;
+  }
+
+  .ps-actions span.is-solid {
+    background: #f2f2ee;
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  /* TableSnap */
+  .ps-prompt {
+    align-self: flex-start;
+    margin-top: 1.4em;
+    padding: 0.7em 1em;
+    border-radius: 1.1em 1.1em 1.1em 0.3em;
+    background: #eeeee8;
+    font-size: 1.08em;
+    font-weight: 700;
+  }
+
+  .ps-finder {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    margin-top: 1.1em;
+    border-radius: 1.6em;
+    background: #efefe9;
+    overflow: hidden;
+  }
+
+  .ps-corner {
+    position: absolute;
+    width: 2.4em;
+    height: 2.4em;
+    border: 0.32em solid var(--ink);
+  }
+
+  .ps-corner--tl {
+    top: 1em;
+    left: 1em;
+    border-right: 0;
+    border-bottom: 0;
+    border-top-left-radius: 0.8em;
+  }
+
+  .ps-corner--tr {
+    top: 1em;
+    right: 1em;
+    border-left: 0;
+    border-bottom: 0;
+    border-top-right-radius: 0.8em;
+  }
+
+  .ps-corner--bl {
+    bottom: 1em;
+    left: 1em;
+    border-right: 0;
+    border-top: 0;
+    border-bottom-left-radius: 0.8em;
+  }
+
+  .ps-corner--br {
+    bottom: 1em;
+    right: 1em;
+    border-left: 0;
+    border-top: 0;
+    border-bottom-right-radius: 0.8em;
+  }
+
+  .ps-qr {
+    width: 58%;
+    height: 58%;
+    fill: var(--ink);
+  }
+
+  .ps-qr .qr-ring {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 0.7;
+  }
+
+  .ps-scanline {
+    --scan-distance: 9.4em;
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    top: 22%;
+    height: 0.3em;
+    border-radius: 0.2em;
+    background: var(--lime);
+    box-shadow: 0 0 1em 0.2em rgba(212, 245, 30, 0.7);
+    animation: dexicScan 3.2s ease-in-out infinite;
+  }
+
+  .ps-rec-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  .ps-timer,
+  .ps-hint {
+    width: 5.2em;
+    font-size: 0.9em;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .ps-hint {
+    text-align: right;
+    font-size: 0.78em;
+    letter-spacing: 0.04em;
+    color: #6b6b6b;
+  }
+
+  .ps-rec {
+    display: grid;
+    place-items: center;
+    width: 5.4em;
+    height: 5.4em;
+    border-radius: 50%;
+    border: 0.35em solid var(--ink);
+  }
+
+  .ps-rec i {
+    width: 3.9em;
+    height: 3.9em;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+
+  /* Woofy */
+  .ps-body--map {
+    padding: 0;
+  }
+
+  .ps-map {
+    position: absolute;
+    inset: -2.8em 0 0;
+    width: 100%;
+    height: calc(100% + 2.8em);
+  }
+
+  .map-bg {
+    fill: #ecece5;
+  }
+
+  .map-block {
+    fill: #e1e1d9;
+  }
+
+  .map-park {
+    fill: rgba(108, 92, 255, 0.12);
+  }
+
+  .map-road {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 9;
+    stroke-linecap: round;
+  }
+
+  .map-road--thin {
+    stroke-width: 5;
+  }
+
+  .ps-search {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin: 0.6em 1.2em 0;
+    padding: 0.8em 1em;
+    border-radius: 1.3em;
+    background: #ffffff;
+    box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.08);
+    font-size: 1.05em;
+    font-weight: 800;
+  }
+
+  .ps-search :global(svg) {
+    width: 1.2em;
+    height: 1.2em;
+  }
+
+  .ps-count {
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 50%;
+    background: var(--lime);
+    font-size: 0.85em;
+  }
+
+  .ps-radius {
+    position: absolute;
+    left: 50%;
+    top: 44%;
+    width: 13em;
+    height: 13em;
+    margin: -6.5em 0 0 -6.5em;
+    border-radius: 50%;
+    background: rgba(108, 92, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(108, 92, 255, 0.35);
+  }
+
+  .ps-pin {
+    position: absolute;
+    left: 50%;
+    top: 44%;
+    display: grid;
+    place-items: center;
+    width: 3.6em;
+    height: 3.6em;
+    margin: -3.6em 0 0 -1.8em;
+    border-radius: 50% 50% 50% 0;
+    background: var(--violet);
+    color: var(--white);
+    transform: rotate(-45deg);
+    box-shadow: 0 0.8em 1.6em rgba(108, 92, 255, 0.45);
+  }
+
+  .ps-pin :global(svg) {
+    width: 1.7em;
+    height: 1.7em;
+    transform: rotate(45deg);
+  }
+
+  .ps-dot {
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    border: 0.25em solid #ffffff;
+    box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.15);
+  }
+
+  .ps-dot--a {
+    left: 20%;
+    top: 30%;
+    background: var(--lime);
+  }
+
+  .ps-dot--b {
+    left: 72%;
+    top: 58%;
+    background: var(--ink);
+  }
+
+  .ps-dot--c {
+    left: 30%;
+    top: 62%;
+    background: var(--lime);
+  }
+
+  .ps-sheet {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding: 0.7em 1.2em 1.6em;
+    border-radius: 2em 2em 0 0;
+    background: #ffffff;
+    box-shadow: 0 -0.6em 1.6em rgba(0, 0, 0, 0.08);
+  }
+
+  .ps-handle {
+    display: block;
+    width: 3.4em;
+    height: 0.4em;
+    margin: 0 auto 1em;
+    border-radius: 1em;
+    background: #dcdcd6;
+  }
+
+  .ps-sheet-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+  }
+
+  .ps-sheet-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    min-width: 0;
+    font-size: 0.95em;
+    color: #6b6b6b;
+    white-space: nowrap;
+  }
+
+  .ps-sheet-text b {
+    font-size: 1.2em;
+    color: var(--ink);
+  }
+</style>

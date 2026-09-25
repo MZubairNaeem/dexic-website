@@ -1,0 +1,49 @@
+---
+// Vertical rotated microcopy that runs up a section edge.
+interface Props {
+  text: string
+  secondary?: string
+  class?: string
+  style?: string
+}
+
+const { text, secondary, class: className, style, ...rest } = Astro.props
+---
+
+<div class:list={['edge', className]} style={style} aria-hidden="true" {...rest}>
+  <span class="edge-text">{text}</span>
+  {secondary && <span class="edge-text edge-text--muted">{secondary}</span>}
+  <span class="edge-line"></span>
+</div>
+
+<style>
+  .edge {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 8px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    pointer-events: none;
+  }
+
+  .edge-text {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--fg);
+  }
+
+  .edge-text--muted {
+    color: var(--muted);
+  }
+
+  .edge-line {
+    width: 1.5px;
+    height: 72px;
+    margin-top: 16px;
+    background: var(--fg);
+  }
+</style>

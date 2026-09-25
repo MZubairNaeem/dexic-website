@@ -1,0 +1,71 @@
+---
+// Handwritten side note with a lime scribble underline and a hand-drawn arrow.
+import { arrowHead, type Point } from './geometry'
+
+type Direction = 'down-left' | 'down-right' | 'up-left' | 'up-right' | 'left' | 'right' | 'down' | 'curl'
+
+interface Props {
+  text: string
+  arrow?: Direction | 'none'
+  rotate?: number
+  underline?: boolean
+  delay?: number
+  size?: number
+  class?: string
+  style?: string
+}
+
+const {
+  text,
+  arrow = 'down-left',
+  rotate = -4,
+  underline = true,
+  delay = 0,
+  size,
+  class: className,
+  style = '',
+  ...rest
+} = Astro.props
+
+// Shaft path, its tip and the last control point (for the arrowhead angle).
+const ARROWS: Record<Direction, { d: string; tip: Point; from: Point }> = {
+  'down-left': { d: 'M72 4C78 28 60 50 12 56', tip: [12, 56], from: [60, 50] },
+  'down-right': { d: 'M14 4C8 28 26 50 74 56', tip: [74, 56], from: [26, 50] },
+  'up-left': { d: 'M72 62C78 38 60 16 12 10', tip: [12, 10], from: [60, 16] },
+  'up-right': { d: 'M14 62C8 38 26 16 74 10', tip: [74, 10], from: [26, 16] },
+  left: { d: 'M84 30C62 14 34 44 6 30', tip: [6, 30], from: [34, 44] },
+  right: { d: 'M2 30C24 14 52 44 80 30', tip: [80, 30], from: [52, 44] },
+  down: { d: 'M40 2C60 20 20 38 42 62', tip: [42, 62], from: [20, 38] },
+  curl: { d: 'M10 4C32 0 48 14 40 26S14 34 22 22 58 20 74 58', tip: [74, 58], from: [58, 20] }
+}
+
+const shape = arrow === 'none' ? undefined : ARROWS[arrow]
+const head = shape ? arrowHead(shape.tip, shape.from, 11) : ''
+const sizeVar = size ? `--anno-size:${size}px;` : ''
+---
+
+<div
+  class:list={['anno', shape && `anno--${arrow}`, className]}
+  style={`--anno-rot:${rotate}deg;--draw-delay:${delay}ms;${sizeVar}${style}`}
+  data-draw
+  {...rest}
+>
+  <span class="anno-text">
+    {text}
+    {
+      underline && (
+        <svg class="scrib-svg" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path d="M3 12c30-6 64-8 98-4s62 6 96-2" />
+        </svg>
+      )
+    }
+  </span>
+  {
+    shape && (
+      <svg class="anno-arrow" viewBox="0 0 86 66" aria-hidden="true" focusable="false">
+        <path class="anno-shaft" d={shape.d} pathLength="1" />
+        <path class="anno-head" d={head} pathLength="1" />
+      </svg>
+    )
+  }
+</div>

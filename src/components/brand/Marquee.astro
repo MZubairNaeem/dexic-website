@@ -1,0 +1,102 @@
+---
+// Thin infinite strip of tracked micro labels. Decorative; pauses on hover.
+interface Props {
+  items: string[]
+  tone?: 'lime' | 'ink' | 'plain'
+  tilt?: number
+  speed?: number
+  class?: string
+}
+
+const { items, tone = 'lime', tilt = 0, speed = 42, class: className, ...rest } = Astro.props
+// Repeat so one group is always wider than the widest screen.
+const group = Array.from({ length: 6 }, () => items).flat()
+---
+
+<div
+  class:list={['marquee', `marquee--${tone}`, className]}
+  style={`--tilt:${tilt}deg;--speed:${speed}s`}
+  aria-hidden="true"
+  {...rest}
+>
+  <div class="marquee-track">
+    {
+      [0, 1].map(() => (
+        <div class="marquee-group">
+          {group.map((item) => (
+            <>
+              <span class="marquee-item">{item}</span>
+              <span class="marquee-dot" />
+            </>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    position: relative;
+    width: 104%;
+    margin-left: -2%;
+    overflow: hidden;
+    padding: 14px 0;
+    transform: rotate(var(--tilt));
+    user-select: none;
+  }
+
+  .marquee--lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .marquee--ink {
+    background: var(--band);
+    color: var(--paper);
+  }
+
+  .marquee--plain {
+    border-block: 1px solid var(--line);
+    color: var(--fg);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: dexicMarquee var(--speed) linear infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .marquee-group {
+    flex: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .marquee-item {
+    padding: 0 24px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.34em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .marquee-dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--violet);
+  }
+
+  .marquee--ink .marquee-dot,
+  .marquee--plain .marquee-dot {
+    background: var(--lime);
+  }
+</style>

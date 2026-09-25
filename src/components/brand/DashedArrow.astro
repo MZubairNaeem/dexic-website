@@ -1,0 +1,72 @@
+---
+// Dashed curved arrow for connecting ideas. Revealed left → right on scroll.
+import { arrowHead, type Point } from './geometry'
+
+type Variant = 'swoop-down' | 'swoop-right' | 'loop' | 'arc-right'
+
+interface Props {
+  variant?: Variant
+  width?: number
+  delay?: number
+  class?: string
+  style?: string
+}
+
+const { variant = 'swoop-down', width = 180, delay = 0, class: className, style = '', ...rest } = Astro.props
+
+const SHAPES: Record<Variant, { box: [number, number]; d: string; tip: Point; from: Point }> = {
+  'swoop-down': { box: [200, 130], d: 'M8 12C80-4 176 18 158 116', tip: [158, 116], from: [176, 18] },
+  'swoop-right': { box: [220, 90], d: 'M6 70C50 6 150 0 208 52', tip: [208, 52], from: [150, 0] },
+  loop: { box: [220, 140], d: 'M8 28C60 2 120 10 132 48S96 110 76 84 128 20 210 118', tip: [210, 118], from: [128, 20] },
+  'arc-right': { box: [220, 60], d: 'M6 44C60 4 160 4 212 40', tip: [212, 40], from: [160, 4] }
+}
+
+const shape = SHAPES[variant]
+const [w, h] = shape.box
+const height = Math.round((width * h) / w)
+---
+
+<svg
+  class:list={['dashed-arrow', className]}
+  width={width}
+  height={height}
+  viewBox={`0 0 ${w} ${h}`}
+  style={`--draw-delay:${delay}ms;${style}`}
+  aria-hidden="true"
+  focusable="false"
+  data-draw
+  {...rest}
+>
+  <path class="da-shaft" d={shape.d}></path>
+  <path class="da-head" d={arrowHead(shape.tip, shape.from, 12, 32)}></path>
+</svg>
+
+<style>
+  .dashed-arrow {
+    display: block;
+    overflow: visible;
+    pointer-events: none;
+    color: var(--fg);
+    clip-path: inset(-10% -10% -10% -10%);
+  }
+
+  .dashed-arrow path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .da-shaft {
+    stroke-dasharray: 6 7;
+  }
+
+  :global(html.motion) .dashed-arrow:not(.is-drawn) {
+    clip-path: inset(-10% 110% -10% -10%);
+  }
+
+  :global(html.motion) .dashed-arrow.is-drawn {
+    transition: clip-path 1.4s var(--ease-draw) var(--draw-delay, 0ms);
+  }
+</style>

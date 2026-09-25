@@ -1,0 +1,15 @@
+---
+// Short phrase with a hand-drawn lime scribble underneath.
+interface Props {
+  delay?: number
+  class?: string
+}
+
+const { delay = 0, class: className, ...rest } = Astro.props
+---
+
+<span class:list={['scrib', className]} style={`--draw-delay:${delay}ms`} data-draw {...rest}
+  ><slot /><svg class="scrib-svg" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true" focusable="false"
+    ><path d="M3 13c26-7 52-9 80-5s52 7 80 1c12-3 24-5 34-3"></path></svg
+  ></span
+>

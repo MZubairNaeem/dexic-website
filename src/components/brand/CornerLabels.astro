@@ -1,0 +1,51 @@
+---
+// Small letterspaced stacked labels for section corners, with a short lime line.
+interface Props {
+  items: string[]
+  align?: 'left' | 'right'
+  class?: string
+  style?: string
+}
+
+const { items, align = 'left', class: className, style, ...rest } = Astro.props
+---
+
+<div class:list={['corner', `corner--${align}`, className]} style={style} aria-hidden="true" {...rest}>
+  {items.map((item) => <span>{item}</span>)}
+  <span class="corner-line"></span>
+</div>
+
+<style>
+  .corner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    line-height: 1.9;
+    text-transform: uppercase;
+    color: var(--fg);
+    pointer-events: none;
+  }
+
+  .corner--right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .corner-line {
+    width: 38px;
+    height: 3px;
+    margin-top: 10px;
+    border-radius: 2px;
+    background: var(--lime);
+  }
+
+  .corner--right .corner-line {
+    order: -1;
+    margin: 0 0 10px;
+    background: var(--fg);
+    height: 1.5px;
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+// 2–3 stacked, tilted cards (white / lime / violet) with a short question
+// and a line icon. Wiggle on hover.
+import Icon from './Icon.astro'
+import type { IconName } from './icons'
+
+interface Card {
+  text: string
+  icon: IconName
+  tone: 'white' | 'lime' | 'violet'
+}
+
+interface Props {
+  cards: Card[]
+  size?: 'md' | 'sm'
+  class?: string
+  style?: string
+}
+
+const { cards, size = 'md', class: className, style, ...rest } = Astro.props
+const TILT = [-7, 3, 8]
+const DROP = [26, 0, 34]
+---
+
+<ul class:list={['stickies', `stickies--${size}`, className]} style={style} role="list" {...rest}>
+  {
+    cards.map((card, i) => (
+      <li class={`sticky sticky--${card.tone}`} style={`--r:${TILT[i % 3]}deg;--y:${DROP[i % 3]}px;--z:${i + 1}`}>
+        <p class="sticky-text">{card.text}</p>
+        <Icon name={card.icon} size={30} strokeWidth={1.6} class="sticky-icon" />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .stickies {
+    --w: 214px;
+    --h: 172px;
+    --overlap: 38px;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0 0 40px;
+    list-style: none;
+  }
+
+  .stickies--sm {
+    --w: 172px;
+    --h: 136px;
+    --overlap: 30px;
+  }
+
+  .sticky {
+    position: relative;
+    z-index: var(--z);
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    width: var(--w);
+    min-height: var(--h);
+    padding: 22px 22px 20px;
+    border-radius: 22px;
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.1),
+      0 2px 6px rgba(0, 0, 0, 0.05);
+    transform: translateY(var(--y)) rotate(var(--r));
+    transition:
+      transform 0.5s var(--ease-spring),
+      box-shadow 0.3s ease;
+  }
+
+  .sticky + .sticky {
+    margin-left: calc(var(--overlap) * -1);
+  }
+
+  .sticky:hover {
+    z-index: 10;
+    transform: translateY(calc(var(--y) - 12px)) rotate(calc(var(--r) * 0.4));
+    box-shadow:
+      0 26px 50px rgba(0, 0, 0, 0.16),
+      0 2px 6px rgba(0, 0, 0, 0.05);
+    animation: stickyWiggle 0.65s ease;
+  }
+
+  @keyframes stickyWiggle {
+    0% {
+      rotate: 0deg;
+    }
+    25% {
+      rotate: -3deg;
+    }
+    50% {
+      rotate: 2.5deg;
+    }
+    75% {
+      rotate: -1.2deg;
+    }
+    100% {
+      rotate: 0deg;
+    }
+  }
+
+  .sticky--white {
+    background: var(--surface);
+    color: var(--fg);
+  }
+
+  .sticky--lime {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .sticky--violet {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .sticky-text {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .stickies--sm .sticky {
+    padding: 18px 18px 16px;
+    border-radius: 18px;
+  }
+
+  .stickies--sm .sticky-text {
+    font-size: 16px;
+  }
+
+  .stickies--sm .sticky :global(.sticky-icon) {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Three cards must fit the viewport: 3w - 2·overlap ≤ ~86vw */
+  @media (max-width: 560px) {
+    .stickies {
+      --w: min(172px, 37vw);
+      --h: 136px;
+      --overlap: 13vw;
+    }
+
+    /* Narrower overlap so a long word on the middle card is never covered */
+    .stickies--sm {
+      --w: min(150px, 33vw);
+      --h: 118px;
+      --overlap: 4vw;
+    }
+
+    .stickies--sm .sticky-text {
+      font-size: 14px;
+    }
+
+    .sticky {
+      padding: 16px 16px 14px;
+      border-radius: 18px;
+    }
+
+    .sticky-text {
+      font-size: 15.5px;
+    }
+
+    .sticky :global(.sticky-icon) {
+      width: 24px;
+      height: 24px;
+    }
+  }
+</style>

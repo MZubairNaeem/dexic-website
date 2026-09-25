@@ -2,6 +2,12 @@
 export const prerender = true
 
 import Layout from '../layouts/Layout.astro'
+import Highlight from '../components/brand/Highlight.astro'
+import Sparks from '../components/brand/Sparks.astro'
+import Annotation from '../components/brand/Annotation.astro'
+import ArrowButton from '../components/brand/ArrowButton.astro'
+import StickyCards from '../components/brand/StickyCards.astro'
+import Icon from '../components/brand/Icon.astro'
 ---
 
 <Layout
@@ -9,66 +15,94 @@ import Layout from '../layouts/Layout.astro'
   description="Whether it's a product question, a partnership, or a problem you think is worth solving — write to us and a real person will reply."
   active="contact"
 >
-  <section class="hero">
-    <div class="container split">
-      <div>
-        <div class="eyebrow">
-          <span class="dot"></span>
-          <span>Contact</span>
-        </div>
-        <h1 class="h-hero hero-title">Let's start a conversation.</h1>
-        <p class="hero-copy">
-          Whether it's a product question, a partnership, or a problem you think is worth solving — write to us and a
-          real person will reply.
-        </p>
-        <div class="numbered-list info-list">
-          <div class="info-row">
-            <span class="label">General</span>
-            <a href="mailto:contact@dexic.tech" class="value">contact@dexic.tech</a>
-          </div>
-          <div class="info-row">
-            <span class="label">Founders</span>
-            <span class="value">
-              <a href="mailto:zubair@dexic.tech">zubair@dexic.tech</a><br />
-              <a href="mailto:talha@dexic.tech">talha@dexic.tech</a>
-            </span>
-          </div>
-          <div class="info-row">
-            <span class="label">Products</span>
-            <a href="/#products" class="value">StacShip &middot; TableSnap &middot; Woofy</a>
-          </div>
-        </div>
-      </div>
+  <section class="page-hero contact-hero has-grid">
+    <div class="container">
+      <span class="kicker">Contact</span>
+      <h1 class="page-title contact-title">
+        Let's start a <span class="spark-anchor"
+          ><Highlight variant="block" rotate={-1.4} delay={300}>conversation.</Highlight><Sparks
+            size={60}
+            rotate={-6}
+            delay={900}
+          /></span
+        >
+      </h1>
 
-      <div class="card contact-card">
-        <div class="form-success" data-contact-success hidden>
-          <span class="tag">Received</span>
-          <p>Thanks for reaching out — we'll reply shortly.</p>
+      <div class="contact-grid">
+        <div class="contact-intro">
+          <p class="body-lg page-copy">
+            Whether it's a product question, a partnership, or a problem you think is worth solving — write to us and a
+            real person will reply.
+          </p>
+
+          <StickyCards
+            size="sm"
+            class="contact-stickies"
+            aria-hidden="true"
+            cards={[
+              { text: 'A product question?', icon: 'help', tone: 'white' },
+              { text: 'A partnership?', icon: 'users', tone: 'lime' },
+              { text: 'A problem worth solving?', icon: 'lightbulb', tone: 'violet' }
+            ]}
+          />
+
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-tile" aria-hidden="true"><Icon name="mail" size={18} strokeWidth={2} /></span>
+              <span class="label">General</span>
+              <a href="mailto:contact@dexic.tech" class="value">contact@dexic.tech</a>
+            </div>
+            <div class="info-row">
+              <span class="info-tile info-tile--violet" aria-hidden="true"
+                ><Icon name="users" size={18} strokeWidth={2} /></span
+              >
+              <span class="label">Founders</span>
+              <span class="value">
+                <a href="mailto:zubair@dexic.tech">zubair@dexic.tech</a><br />
+                <a href="mailto:talha@dexic.tech">talha@dexic.tech</a>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-tile info-tile--ink" aria-hidden="true"><Icon name="grid" size={18} strokeWidth={2} /></span>
+              <span class="label">Products</span>
+              <a href="/#products" class="value">StacShip &middot; TableSnap &middot; Woofy</a>
+            </div>
+          </div>
         </div>
-        <form class="form-grid" data-contact-form>
-          <label class="form-field">
-            <span>Name</span>
-            <input type="text" name="name" required placeholder="Your name" />
-          </label>
-          <label class="form-field">
-            <span>Email</span>
-            <input type="email" name="email" required placeholder="you@company.com" />
-          </label>
-          <label class="form-field">
-            <span>Company <span class="optional">(optional)</span></span>
-            <input type="text" name="company" placeholder="Company" />
-          </label>
-          <label class="form-field">
-            <span>Subject</span>
-            <input type="text" name="subject" required placeholder="What's this about?" />
-          </label>
-          <label class="form-field full">
-            <span>Message</span>
-            <textarea name="message" rows="6" required placeholder="Tell us a little about it."></textarea>
-          </label>
-          <p class="form-error" data-contact-error hidden>Something went wrong. Please try again.</p>
-          <button type="submit" class="btn btn-primary form-submit">Submit</button>
-        </form>
+
+        <div class="contact-form-col">
+          <Annotation text="a real person will reply" arrow="down-left" rotate={-5} delay={700} class="contact-anno" />
+          <div class="surface-card contact-card">
+            <div class="form-success" data-contact-success hidden>
+              <span class="tag">Received</span>
+              <p>Thanks for reaching out — we'll reply shortly.</p>
+            </div>
+            <form class="form-grid" data-contact-form>
+              <label class="form-field">
+                <span>Name</span>
+                <input type="text" name="name" required placeholder="Your name" />
+              </label>
+              <label class="form-field">
+                <span>Email</span>
+                <input type="email" name="email" required placeholder="you@company.com" />
+              </label>
+              <label class="form-field">
+                <span>Company <span class="optional">(optional)</span></span>
+                <input type="text" name="company" placeholder="Company" />
+              </label>
+              <label class="form-field">
+                <span>Subject</span>
+                <input type="text" name="subject" required placeholder="What's this about?" />
+              </label>
+              <label class="form-field full">
+                <span>Message</span>
+                <textarea name="message" rows="6" required placeholder="Tell us a little about it."></textarea>
+              </label>
+              <p class="form-error" data-contact-error hidden>Something went wrong. Please try again.</p>
+              <ArrowButton type="submit" label="Submit" class="form-submit" />
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -107,79 +141,137 @@ import Layout from '../layouts/Layout.astro'
 </script>
 
 <style>
-  .hero {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 32px 140px;
+  .contact-hero {
+    padding-bottom: clamp(88px, 10vw, 136px);
   }
 
-  .split {
-    padding: 0;
+  .contact-title {
+    max-width: 1000px;
+  }
+
+  .contact-grid {
+    display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+    margin-top: clamp(40px, 5vw, 64px);
   }
 
-  .hero-title {
-    font-size: 52px;
-    line-height: 1.06;
+  .page-copy {
+    margin-top: 0;
+    max-width: 440px;
   }
 
-  .hero-copy {
-    margin: 26px 0 0;
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 400px;
-    text-wrap: pretty;
+  .contact-intro :global(.contact-stickies) {
+    margin-top: 44px;
+    padding-left: 6px;
   }
 
   .info-list {
-    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 40px;
   }
 
   .info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 18px 12px 12px;
+    border-radius: 18px;
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .info-tile {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  .info-tile--violet {
+    background: var(--violet);
+    color: var(--white);
+  }
+
+  .info-tile--ink {
+    background: var(--ink);
+    color: var(--lime);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 
   .info-row .label {
-    font-size: 14px;
-    color: var(--dim);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
   .info-row .value {
-    font-size: 14px;
-    color: var(--fg);
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.5;
     text-align: right;
+    color: var(--fg);
   }
 
-  .optional {
-    color: var(--dim);
+  .info-row a {
+    background-image: linear-gradient(var(--lime), var(--lime));
+    background-repeat: no-repeat;
+    background-position: 0 90%;
+    background-size: 0% 35%;
+    transition: background-size 0.35s var(--ease-draw);
+  }
+
+  .info-row a:hover {
+    background-size: 100% 35%;
+  }
+
+  .contact-form-col {
+    position: relative;
+  }
+
+  .contact-form-col :global(.contact-anno) {
+    position: absolute;
+    right: 10%;
+    top: -86px;
   }
 
   .contact-card {
-    padding: 44px;
-  }
-
-  .form-submit {
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
-  .form-error {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-size: 13px;
-    color: var(--accent);
+    padding: clamp(28px, 3.6vw, 48px);
   }
 
   @media (max-width: 900px) {
-    .hero {
-      padding: 80px 24px 90px;
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr);
     }
-    .split {
-      grid-template-columns: 1fr;
-      gap: 40px;
+
+    .contact-form-col {
+      padding-top: 72px;
+    }
+
+    .contact-form-col :global(.contact-anno) {
+      top: 0;
+      right: auto;
+      left: 30%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .info-row {
+      grid-template-columns: 40px minmax(0, 1fr);
+    }
+
+    .info-row .value {
+      grid-column: 2;
+      text-align: left;
     }
   }
 </style>

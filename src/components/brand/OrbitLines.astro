@@ -1,0 +1,94 @@
+---
+// Thin solid + dashed circular orbits with lime/violet dots riding the lines.
+import { arc, polar } from './geometry'
+
+interface Props {
+  class?: string
+  style?: string
+}
+
+const { class: className, style, ...rest } = Astro.props
+
+const C = 300
+const outer = { r: 292, dots: [{ deg: -38, tone: 'lime', r: 7 }, { deg: 128, tone: 'violet', r: 5 }] }
+const middle = { r: 246, dots: [{ deg: 200, tone: 'violet', r: 6 }, { deg: 18, tone: 'lime', r: 4.5 }] }
+const inner = { r: 204, from: 150, to: 330, dots: [{ deg: 330, tone: 'lime', r: 5.5 }] }
+
+const place = (r: number, dots: { deg: number; tone: string; r: number }[]) =>
+  dots.map((d) => ({ ...d, at: polar(C, C, r, d.deg) }))
+---
+
+<svg class:list={['orbit', className]} style={style} viewBox="0 0 600 600" aria-hidden="true" focusable="false" {...rest}>
+  <g class="orbit-ring orbit-ring--outer">
+    <circle cx={C} cy={C} r={outer.r} class="o-line" />
+    {place(outer.r, outer.dots).map((d) => <circle cx={d.at[0]} cy={d.at[1]} r={d.r} class={`o-dot o-dot--${d.tone}`} />)}
+  </g>
+  <g class="orbit-ring orbit-ring--middle">
+    <circle cx={C} cy={C} r={middle.r} class="o-line o-line--dashed" />
+    {place(middle.r, middle.dots).map((d) => <circle cx={d.at[0]} cy={d.at[1]} r={d.r} class={`o-dot o-dot--${d.tone}`} />)}
+  </g>
+  <g class="orbit-ring orbit-ring--inner">
+    <path d={arc(C, C, inner.r, inner.from, inner.to)} class="o-line" />
+    {
+      place(inner.r, inner.dots).map((d) => (
+        <>
+          <circle cx={d.at[0]} cy={d.at[1]} r={d.r * 2.2} class="o-halo" />
+          <circle cx={d.at[0]} cy={d.at[1]} r={d.r} class={`o-dot o-dot--${d.tone}`} />
+        </>
+      ))
+    }
+  </g>
+</svg>
+
+<style>
+  .orbit {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .orbit-ring {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+  }
+
+  .orbit-ring--outer {
+    animation: dexicSpin 180s linear infinite;
+  }
+
+  .orbit-ring--middle {
+    animation: dexicSpinBack 130s linear infinite;
+  }
+
+  .orbit-ring--inner {
+    animation: dexicSpin 95s linear infinite;
+  }
+
+  .o-line {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .o-line--dashed {
+    stroke-dasharray: 3 7;
+  }
+
+  .o-dot--lime {
+    fill: var(--lime);
+  }
+
+  .o-dot--violet {
+    fill: var(--violet);
+  }
+
+  .o-halo {
+    fill: var(--lime);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dexicHalo 2.8s ease-out infinite;
+  }
+</style>

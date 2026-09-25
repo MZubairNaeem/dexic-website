@@ -1,0 +1,94 @@
+---
+// "01 ——— Label" before section titles, or "01 / 05 →" pager when `total` is set.
+interface Props {
+  num: string | number
+  label?: string
+  total?: string | number
+  class?: string
+}
+
+const { num, label, total, class: className, ...rest } = Astro.props
+const pad = (n: string | number) => String(n).padStart(2, '0')
+---
+
+{
+  total !== undefined ? (
+    <span class:list={['pager', className]} {...rest}>
+      <span class="pager-now">{pad(num)}</span>
+      <span class="pager-sep">/</span>
+      <span class="pager-total">{pad(total)}</span>
+      <svg class="pager-arrow" viewBox="0 0 34 12" aria-hidden="true" focusable="false">
+        <path d="M1 6h31M27 1l5 5-5 5" />
+      </svg>
+    </span>
+  ) : (
+    <div class:list={['counter', className]} {...rest}>
+      <span class="counter-num">{pad(num)}</span>
+      <span class="counter-line" aria-hidden="true" />
+      {label && <span class="counter-label">{label}</span>}
+    </div>
+  )
+}
+
+<style>
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+
+  .counter-num {
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter-line {
+    width: 64px;
+    height: 1.5px;
+    background: var(--fg);
+    transform-origin: 0 50%;
+  }
+
+  .counter-label {
+    color: var(--muted);
+  }
+
+  .pager {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+  }
+
+  .pager-sep,
+  .pager-total {
+    color: var(--muted);
+  }
+
+  .pager-arrow {
+    width: 30px;
+    height: 12px;
+    margin-left: 6px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  :global(a:hover) .pager-arrow {
+    transform: translateX(5px);
+  }
+</style>

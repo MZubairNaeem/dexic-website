@@ -2,140 +2,111 @@
 export const prerender = true
 
 import Layout from '../layouts/Layout.astro'
+import CornerLabels from '../components/brand/CornerLabels.astro'
 ---
 
 <Layout
   title="Refund & Cancellation Policy — Dexic"
   description="Our policy on order cancellations, in-app purchases, and refunds across the Dexic website and our products, including Woofy, Starly, and Blood Finder."
 >
-  <section class="hero">
+  <section class="page-hero has-grid">
     <div class="container">
-      <div class="eyebrow">
-        <span class="dot"></span>
-        <span>Legal</span>
-      </div>
-      <h1 class="h-hero hero-title">Refund &amp; Cancellation Policy</h1>
-      <p class="hero-copy">
+      <span class="kicker">Legal</span>
+      <h1 class="page-title">Refund &amp; Cancellation Policy<span class="dot-end" aria-hidden="true"></span></h1>
+      <p class="body-lg page-copy">
         Our policy on order cancellations, in-app purchases, and refunds across the Dexic website and our products,
         including Woofy, Starly, and Blood Finder.
       </p>
     </div>
+    <CornerLabels items={['Ideas', 'Products', 'People', 'Impact']} align="right" class="legal-corner" />
   </section>
 
-  <section class="section">
+  <section class="section legal-section">
     <div class="section-inner">
-      <div class="legal-content">
-        <h2>1. Overview</h2>
-        <p>
-          This Refund &amp; Cancellation Policy applies to purchases and orders made through the Dexic website
-          (dexic.tech) and through our mobile applications, including <strong>Woofy</strong>, <strong>Starly</strong>,
-          <strong>Blood Finder</strong>, and any future products we release. By placing an order or making a
-          purchase through our website or apps, you agree to this policy.
-        </p>
+      <div class="surface-card legal-card">
+        <div class="legal-content">
+          <h2>1. Overview</h2>
+          <p>
+            This Refund &amp; Cancellation Policy applies to purchases and orders made through the Dexic website
+            (dexic.tech) and through our mobile applications, including <strong>Woofy</strong>, <strong>Starly</strong>,
+            <strong>Blood Finder</strong>, and any future products we release. By placing an order or making a
+            purchase through our website or apps, you agree to this policy.
+          </p>
 
-        <h2>2. Order Cancellations</h2>
-        <ul>
-          <li>
-            You may cancel an order placed through our website at any time before it has been processed or
-            fulfilled, by contacting us at <a href="mailto:contact@dexic.tech">contact@dexic.tech</a> or
-            +92 305 8688 545.
-          </li>
-          <li>
-            Once an order has been processed, shipped, or a digital service has been delivered or consumed (for
-            example, once a live session on Starly has started, or a request on Woofy or Blood Finder has been acted
-            upon), it can no longer be cancelled.
-          </li>
-          <li>
-            We reserve the right to cancel any order at our discretion — for example, if goods or services are no
-            longer available, we are unable to deliver to your location, or we suspect fraudulent activity. In such
-            cases, you will be notified and any payment already made will be refunded in full.
-          </li>
-        </ul>
+          <h2>2. Order Cancellations</h2>
+          <ul>
+            <li>
+              You may cancel an order placed through our website at any time before it has been processed or
+              fulfilled, by contacting us at <a href="mailto:contact@dexic.tech">contact@dexic.tech</a> or
+              +92 305 8688 545.
+            </li>
+            <li>
+              Once an order has been processed, shipped, or a digital service has been delivered or consumed (for
+              example, once a live session on Starly has started, or a request on Woofy or Blood Finder has been acted
+              upon), it can no longer be cancelled.
+            </li>
+            <li>
+              We reserve the right to cancel any order at our discretion — for example, if goods or services are no
+              longer available, we are unable to deliver to your location, or we suspect fraudulent activity. In such
+              cases, you will be notified and any payment already made will be refunded in full.
+            </li>
+          </ul>
 
-        <h2>3. In-App Purchases and Subscriptions</h2>
-        <ul>
-          <li>
-            Purchases made through <strong>Google Play</strong> or the <strong>Apple App Store</strong> within Woofy,
-            Starly, Blood Finder, or any other Dexic app (such as premium features, coins, or session bookings) are
-            billed and processed directly by Google or Apple, and are subject to their respective refund and
-            cancellation policies.
-          </li>
-          <li>
-            To request a refund for an in-app purchase, please use the refund process provided by
-            <a href="https://support.google.com/googleplay/answer/2479637" target="_blank" rel="noopener">Google Play</a>
-            or the
-            <a href="https://support.apple.com/en-us/HT204084" target="_blank" rel="noopener">App Store</a>, or
-            contact us at <a href="mailto:contact@dexic.tech">contact@dexic.tech</a> and we will assist you in
-            escalating the request where possible.
-          </li>
-          <li>
-            Subscriptions can be cancelled at any time through your Google Play or App Store account settings.
-            Cancelling a subscription stops future billing but does not automatically refund the current billing
-            period.
-          </li>
-        </ul>
+          <h2>3. In-App Purchases and Subscriptions</h2>
+          <ul>
+            <li>
+              Purchases made through <strong>Google Play</strong> or the <strong>Apple App Store</strong> within Woofy,
+              Starly, Blood Finder, or any other Dexic app (such as premium features, coins, or session bookings) are
+              billed and processed directly by Google or Apple, and are subject to their respective refund and
+              cancellation policies.
+            </li>
+            <li>
+              To request a refund for an in-app purchase, please use the refund process provided by
+              <a href="https://support.google.com/googleplay/answer/2479637" target="_blank" rel="noopener">Google Play</a>
+              or the
+              <a href="https://support.apple.com/en-us/HT204084" target="_blank" rel="noopener">App Store</a>, or
+              contact us at <a href="mailto:contact@dexic.tech">contact@dexic.tech</a> and we will assist you in
+              escalating the request where possible.
+            </li>
+            <li>
+              Subscriptions can be cancelled at any time through your Google Play or App Store account settings.
+              Cancelling a subscription stops future billing but does not automatically refund the current billing
+              period.
+            </li>
+          </ul>
 
-        <h2>4. Refund Eligibility</h2>
-        <p>Refunds may be issued where:</p>
-        <ul>
-          <li>you were charged in error or were double-charged;</li>
-          <li>the product or service you paid for was not delivered or provided;</li>
-          <li>a service booked through our apps (such as a Starly live session) was cancelled by us or by the artist before it took place; or</li>
-          <li>you are otherwise entitled to a refund under applicable consumer protection law.</li>
-        </ul>
-        <p>Refunds are generally not available for:</p>
-        <ul>
-          <li>digital content or services that have already been delivered, accessed, or consumed;</li>
-          <li>live sessions or bookings that have already taken place; or</li>
-          <li>a change of mind after a service has been rendered.</li>
-        </ul>
+          <h2>4. Refund Eligibility</h2>
+          <p>Refunds may be issued where:</p>
+          <ul>
+            <li>you were charged in error or were double-charged;</li>
+            <li>the product or service you paid for was not delivered or provided;</li>
+            <li>a service booked through our apps (such as a Starly live session) was cancelled by us or by the artist before it took place; or</li>
+            <li>you are otherwise entitled to a refund under applicable consumer protection law.</li>
+          </ul>
+          <p>Refunds are generally not available for:</p>
+          <ul>
+            <li>digital content or services that have already been delivered, accessed, or consumed;</li>
+            <li>live sessions or bookings that have already taken place; or</li>
+            <li>a change of mind after a service has been rendered.</li>
+          </ul>
 
-        <h2>5. Refund Processing</h2>
-        <p>
-          Approved refunds will be processed to your original method of payment within <strong>7–14 business
-          days</strong>, depending on your bank or payment provider. Refunds for purchases made through Google Play
-          or the App Store are processed by Google or Apple according to their own timelines.
-        </p>
+          <h2>5. Refund Processing</h2>
+          <p>
+            Approved refunds will be processed to your original method of payment within <strong>7–14 business
+            days</strong>, depending on your bank or payment provider. Refunds for purchases made through Google Play
+            or the App Store are processed by Google or Apple according to their own timelines.
+          </p>
 
-        <h2>6. How to Request a Refund or Cancellation</h2>
-        <p>To request a refund or cancel an order, please contact us with your order or transaction details:</p>
-        <ul>
-          <li><strong>Email:</strong> <a href="mailto:contact@dexic.tech">contact@dexic.tech</a></li>
-          <li><strong>Phone:</strong> +92 305 8688 545</li>
-          <li><strong>Address:</strong> Islamabad, Pakistan</li>
-        </ul>
-        <p>We aim to respond to all refund and cancellation requests within 2–3 business days.</p>
+          <h2>6. How to Request a Refund or Cancellation</h2>
+          <p>To request a refund or cancel an order, please contact us with your order or transaction details:</p>
+          <ul>
+            <li><strong>Email:</strong> <a href="mailto:contact@dexic.tech">contact@dexic.tech</a></li>
+            <li><strong>Phone:</strong> +92 305 8688 545</li>
+            <li><strong>Address:</strong> Islamabad, Pakistan</li>
+          </ul>
+          <p>We aim to respond to all refund and cancellation requests within 2–3 business days.</p>
+        </div>
       </div>
     </div>
   </section>
 </Layout>
-
-<style>
-  .hero {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 32px 80px;
-  }
-
-  .hero-title {
-    font-size: 52px;
-  }
-
-  .hero-copy {
-    margin: 26px 0 0;
-    max-width: 620px;
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--muted);
-    text-wrap: pretty;
-  }
-
-  @media (max-width: 900px) {
-    .hero {
-      padding: 80px 24px 60px;
-    }
-    .hero-title {
-      font-size: 38px;
-    }
-  }
-</style>

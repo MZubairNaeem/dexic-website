@@ -1,0 +1,241 @@
+---
+// Homepage hero visual (no photography): a soft grey circle with fanned
+// product screens in the middle, orbit lines, and the D·E·X·I·C values as
+// floating cards around it. Pointer parallax is wired up in Layout.astro.
+import OrbitLines from './brand/OrbitLines.astro'
+import ProductScreen from './brand/ProductScreen.astro'
+import FeatureCard from './brand/FeatureCard.astro'
+import Annotation from './brand/Annotation.astro'
+import Sparks from './brand/Sparks.astro'
+import type { IconName } from './brand/icons'
+
+const VALUES: { title: string; text: string; icon: IconName; tone: 'lime' | 'violet'; rotate: number }[] = [
+  { title: 'Driving', text: 'Momentum over motion.', icon: 'zap', tone: 'lime', rotate: -3 },
+  { title: 'Excellence', text: 'The details nobody sees.', icon: 'award', tone: 'violet', rotate: 2.5 },
+  { title: 'Xperiences', text: 'Interfaces people trust.', icon: 'sparkles', tone: 'lime', rotate: 2 },
+  { title: 'Innovation', text: 'Ideas that hold up.', icon: 'lightbulb', tone: 'violet', rotate: -2.5 },
+  { title: 'Commitment', text: 'We own what we build.', icon: 'infinity', tone: 'lime', rotate: 1.5 }
+]
+
+const SCREENS = [
+  { slug: 'stacship', cls: 'hv-screen--left' },
+  { slug: 'woofy', cls: 'hv-screen--right' },
+  { slug: 'tablesnap', cls: 'hv-screen--center' }
+]
+---
+
+<div class="hv" data-parallax aria-hidden="true">
+  <div class="hv-layer px hv-circle" style="--depth: 0.25"></div>
+  <div class="hv-layer px hv-orbit" style="--depth: 0.5"><OrbitLines /></div>
+
+  <div class="hv-layer px hv-screens" style="--depth: 0.8">
+    {
+      SCREENS.map((s, i) => (
+        <div class={`hv-screen ${s.cls}`} style={`--i:${i}`}>
+          <ProductScreen slug={s.slug} />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    VALUES.map((v, i) => (
+      <div class={`hv-layer px hv-card hv-card--${i + 1}`} style={`--depth:${1.1 + (i % 2) * 0.5};--i:${i}`}>
+        <div class="float">
+          <FeatureCard
+            num={String(i + 1).padStart(2, '0')}
+            title={v.title}
+            text={v.text}
+            icon={v.icon}
+            tone={v.tone}
+            rotate={v.rotate}
+            size="sm"
+          />
+        </div>
+      </div>
+    ))
+  }
+
+  <div class="hv-layer px hv-anno" style="--depth: 0.9">
+    <Annotation text="the name, decoded." arrow="down-left" rotate={-6} delay={1600} />
+  </div>
+  <Sparks class="hv-sparks" size={52} rotate={-100} delay={1300} />
+</div>
+
+<style>
+  .hv {
+    --ps-size: 9px;
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    aspect-ratio: 1 / 1.06;
+    margin-inline: auto;
+    container-type: inline-size;
+  }
+
+  @supports (width: 1cqi) {
+    .hv {
+      --ps-size: 1.62cqi;
+    }
+  }
+
+  .hv-layer {
+    position: absolute;
+  }
+
+  .hv-circle {
+    left: 9%;
+    top: 8%;
+    width: 82%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, var(--glow), rgba(255, 255, 255, 0) 55%),
+      var(--soft-2);
+  }
+
+  .hv-orbit {
+    left: -2%;
+    top: -1%;
+    width: 104%;
+    aspect-ratio: 1;
+  }
+
+  .hv-screens {
+    inset: 0;
+  }
+
+  .hv-screen {
+    position: absolute;
+    left: 50%;
+    top: 49%;
+    width: 20em;
+    height: 40em;
+    margin: -20em 0 0 -10em;
+    font-size: var(--ps-size);
+  }
+
+  .hv-screen--left {
+    transform: translate(-58%, 5%) rotate(-11deg) scale(0.9);
+  }
+
+  .hv-screen--right {
+    transform: translate(58%, 9%) rotate(10deg) scale(0.9);
+  }
+
+  .hv-screen--center {
+    transform: rotate(-2deg);
+  }
+
+  .hv-card {
+    width: 50%;
+    max-width: 272px;
+  }
+
+  .hv-card--1 {
+    left: -6%;
+    top: 3%;
+  }
+
+  .hv-card--2 {
+    right: -9%;
+    top: 16%;
+  }
+
+  .hv-card--3 {
+    left: -13%;
+    top: 47%;
+  }
+
+  .hv-card--4 {
+    right: -12%;
+    top: 58%;
+  }
+
+  .hv-card--5 {
+    left: 6%;
+    bottom: -1%;
+  }
+
+  .hv-anno {
+    right: -4%;
+    top: -8%;
+  }
+
+  .hv :global(.hv-sparks) {
+    position: absolute;
+    left: 50%;
+    top: 3%;
+  }
+
+  /* Load-in choreography */
+  :global(html.motion) .hv-screen {
+    animation: hvScreenIn 1s var(--ease-out) both;
+    animation-delay: calc(150ms + var(--i) * 140ms);
+  }
+
+  :global(html.motion) .hv-card {
+    animation: hvCardIn 0.8s var(--ease-spring) both;
+    animation-delay: calc(650ms + var(--i) * 120ms);
+  }
+
+  @keyframes hvScreenIn {
+    from {
+      opacity: 0;
+      translate: 0 40px;
+    }
+  }
+
+  @keyframes hvCardIn {
+    from {
+      opacity: 0;
+      scale: 0.82;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .hv-card--1 {
+      left: -2%;
+    }
+
+    .hv-card--2 {
+      right: -4%;
+    }
+
+    .hv-card--3 {
+      left: -4%;
+    }
+
+    .hv-card--4 {
+      right: -4%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hv-card {
+      width: 58%;
+    }
+
+    .hv-card--2,
+    .hv-card--4,
+    .hv-card--5 {
+      display: none;
+    }
+
+    .hv-card--1 {
+      left: -2%;
+      top: 2%;
+    }
+
+    .hv-card--3 {
+      left: auto;
+      right: -2%;
+      top: auto;
+      bottom: 4%;
+    }
+
+    .hv-anno {
+      display: none;
+    }
+  }
+</style>

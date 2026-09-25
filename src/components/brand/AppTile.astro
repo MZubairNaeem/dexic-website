@@ -1,0 +1,59 @@
+---
+// Rounded-square app icon for a product.
+import Icon from './Icon.astro'
+import { brandFor } from '../../data/brand'
+
+interface Props {
+  slug: string
+  size?: number
+  class?: string
+  style?: string
+}
+
+const { slug, size = 52, class: className, style = '', ...rest } = Astro.props
+const brand = brandFor(slug)
+---
+
+<span
+  class:list={['app-tile', `app-tile--${brand.tone}`, className]}
+  style={`--tile-size:${size}px;${style}`}
+  aria-hidden="true"
+  {...rest}
+>
+  <Icon name={brand.icon} strokeWidth={2} />
+</span>
+
+<style>
+  .app-tile {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    border-radius: calc(var(--tile-size) * 0.28);
+    background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 8px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  .app-tile :global(svg) {
+    width: 48%;
+    height: 48%;
+  }
+
+  .app-tile--ink {
+    background-color: var(--ink);
+    color: var(--lime);
+  }
+
+  .app-tile--lime {
+    background-color: var(--lime);
+    color: var(--ink);
+  }
+
+  .app-tile--violet {
+    background-color: var(--violet);
+    color: var(--white);
+  }
+</style>

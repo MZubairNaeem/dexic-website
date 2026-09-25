@@ -1,0 +1,28 @@
+---
+// Oversized serif word in near-invisible grey, sitting behind a section.
+interface Props {
+  text: string
+  class?: string
+  style?: string
+}
+
+const { text, class: className, style, ...rest } = Astro.props
+---
+
+<span class:list={['watermark', className]} style={style} aria-hidden="true" {...rest}>{text}</span>
+
+<style>
+  .watermark {
+    position: absolute;
+    z-index: -1;
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: var(--wm-font, clamp(180px, 34vw, 540px));
+    line-height: 0.8;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    color: var(--watermark);
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

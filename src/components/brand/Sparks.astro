@@ -1,0 +1,32 @@
+---
+// 2–3 short strokes radiating from a point — comic-style emphasis.
+interface Props {
+  size?: number
+  rotate?: number
+  tone?: 'lime' | 'violet' | 'ink'
+  count?: 2 | 3
+  delay?: number
+  class?: string
+  style?: string
+}
+
+const { size = 44, rotate = 0, tone = 'lime', count = 3, delay = 0, class: className, style = '', ...rest } = Astro.props
+
+// Strokes radiate from the bottom-left corner of a 48×48 box.
+const STROKES = ['M17.6 38.9 38.8 33.2', 'M14.5 33.5 30 18', 'M9.1 30.4 14.8 9.1']
+const strokes = count === 2 ? [STROKES[0], STROKES[2]] : STROKES
+---
+
+<svg
+  class:list={['sparks', tone !== 'lime' && `sparks--${tone}`, className]}
+  width={size}
+  height={size}
+  viewBox="0 0 48 48"
+  style={`--spark-rot:${rotate}deg;--draw-delay:${delay}ms;${style}`}
+  aria-hidden="true"
+  focusable="false"
+  data-draw
+  {...rest}
+>
+  {strokes.map((d, i) => <path d={d} pathLength="1" style={`--i:${i}`} />)}
+</svg>

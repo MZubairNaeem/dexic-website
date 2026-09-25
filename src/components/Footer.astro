@@ -1,15 +1,17 @@
 ---
-import { Image } from 'astro:assets'
-import logo from '../assets/dexic-logo.png'
+import Wordmark from './brand/Wordmark.astro'
+import Marquee from './brand/Marquee.astro'
+import ThemeSwitch from './brand/ThemeSwitch.astro'
 ---
 
 <footer class="site-footer">
+  <Marquee items={['Build', 'Execute', 'Initiate', 'Grow']} tone="lime" tilt={-1.2} class="footer-marquee" />
+
   <div class="container top">
-    <div>
-      <div class="logo-wrap">
-        <Image src={logo} alt="Dexic" height={24} />
-      </div>
+    <div class="brand">
+      <Wordmark size="lg" />
       <p class="tagline">Building products that remove complexity.</p>
+      <ThemeSwitch />
     </div>
     <div class="col">
       <span class="col-title">Company</span>
@@ -36,91 +38,188 @@ import logo from '../assets/dexic-logo.png'
       <span class="address">Commercial #1, The Fifth Plaza, Naval Anchorage</span>
     </div>
   </div>
-  <div class="container bottom">
-    <span>&copy; {new Date().getFullYear()} Dexic. All rights reserved.</span>
-    <span>Driving Excellence in Xperiences, Innovation and Commitment.</span>
+
+  <div class="giant" aria-hidden="true">Dexic<span class="giant-dot"></span></div>
+
+  <div class="bottom">
+    <div class="container bottom-inner">
+      <span>&copy; {new Date().getFullYear()} Dexic. All rights reserved.</span>
+      <span class="bottom-motto"><span class="bottom-line" aria-hidden="true"></span>Driving Excellence in Xperiences, Innovation and Commitment.</span>
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--border);
+    position: relative;
+    isolation: isolate;
+    margin-top: 40px;
+  }
+
+  .site-footer :global(.footer-marquee) {
+    margin-bottom: clamp(56px, 7vw, 96px);
   }
 
   .top {
-    padding: 72px 32px 40px;
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) repeat(4, minmax(0, 0.6fr));
+    grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 0.7fr));
     gap: 40px;
   }
 
-  .logo-wrap {
-    margin-bottom: 10px;
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
   }
 
   .tagline {
     margin: 0;
-    font-size: 15px;
-    color: var(--muted);
-    max-width: 300px;
+    max-width: 280px;
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--fg);
   }
 
   .col {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 10px;
   }
 
   .col-title {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--dim);
+    color: var(--muted);
   }
 
   .col a {
+    padding: 0 2px;
+    margin: 0 -2px;
     font-size: 15px;
-    color: var(--muted);
+    font-weight: 600;
+    color: var(--fg);
+    background-image: linear-gradient(var(--lime), var(--lime));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 0% 40%;
+    transition: background-size 0.4s var(--ease-draw);
   }
 
-  .col a:hover {
-    color: var(--fg);
+  .col a:hover,
+  .col a:focus-visible {
+    color: var(--ink);
+    background-size: 100% 100%;
   }
 
   .address {
+    max-width: 220px;
     font-size: 15px;
+    line-height: 1.45;
     color: var(--muted);
-    line-height: 1.4;
+  }
+
+  /* Oversized wordmark whose baseline rests exactly on the dark strip below.
+     text-box trims the line box to cap height / alphabetic baseline. */
+  .giant {
+    position: relative;
+    z-index: -1;
+    margin-top: clamp(40px, 6vw, 80px);
+    font-family: var(--font-serif);
+    font-size: clamp(110px, 23vw, 360px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color: var(--watermark);
+    user-select: none;
+    text-box: trim-both cap alphabetic;
+  }
+
+  /* Without text-box, Playfair's baseline sits 0.085em above a 1em line box */
+  @supports not (text-box: trim-both cap alphabetic) {
+    .giant {
+      margin-bottom: -0.085em;
+    }
+  }
+
+  .giant-dot {
+    display: inline-block;
+    width: 0.16em;
+    height: 0.16em;
+    margin-left: 0.03em;
+    border-radius: 50%;
+    background: var(--lime);
   }
 
   .bottom {
-    padding: 28px 32px 44px;
-    border-top: 1px solid #141414;
+    position: relative;
+    background: var(--band);
+    color: rgba(246, 246, 242, 0.72);
+  }
+
+  .bottom-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--dim);
+    gap: 16px 32px;
+    padding-block: 22px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
   }
 
-  @media (max-width: 900px) {
+  .bottom-motto {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    text-align: right;
+  }
+
+  .bottom-line {
+    flex: none;
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--lime);
+  }
+
+  @media (max-width: 1024px) {
     .top {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      row-gap: 40px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 48px;
+    }
+
+    .brand {
+      grid-column: 1 / -1;
     }
   }
 
-  @media (max-width: 560px) {
-    .top {
-      grid-template-columns: 1fr;
-    }
-    .bottom {
+  @media (max-width: 720px) {
+    .bottom-inner {
       flex-direction: column;
       align-items: flex-start;
+      line-height: 1.8;
+    }
+
+    .bottom-motto {
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .top {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

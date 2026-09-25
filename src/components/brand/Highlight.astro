@@ -1,0 +1,21 @@
+---
+// Lime highlighter behind key words. Draws in left → right on scroll.
+//  marker — inline, wraps across lines
+//  brush  — inline, ragged marker-pen edges
+//  block  — single-line slab, rotated a hair
+interface Props {
+  variant?: 'marker' | 'brush' | 'block'
+  tone?: 'lime' | 'violet'
+  rotate?: number
+  delay?: number
+  class?: string
+}
+
+const { variant = 'marker', tone = 'lime', rotate = -1.2, delay = 0, class: className, ...rest } = Astro.props
+---
+
+<span
+  class:list={['hl', `hl--${variant}`, tone !== 'lime' && `hl--${tone}`, className]}
+  style={`--hl-rot:${rotate}deg;--draw-delay:${delay}ms`}
+  data-draw
+  {...rest}><slot /></span>

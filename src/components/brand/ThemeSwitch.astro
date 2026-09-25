@@ -1,0 +1,97 @@
+---
+// Light / Auto / Dark segmented switch. The saved choice is applied before
+// first paint by the inline script in Layout.astro.
+import Icon from './Icon.astro'
+import type { IconName } from './icons'
+
+const OPTIONS: { value: string; label: string; icon: IconName }[] = [
+  { value: 'light', label: 'Light', icon: 'sun' },
+  { value: 'system', label: 'Auto', icon: 'monitor' },
+  { value: 'dark', label: 'Dark', icon: 'moon' }
+]
+---
+
+<div class="theme-switch" role="group" aria-label="Colour theme">
+  {
+    OPTIONS.map((o) => (
+      <button type="button" class="theme-btn" data-theme-choice={o.value} aria-pressed={o.value === 'system' ? 'true' : 'false'}>
+        <Icon name={o.icon} size={14} strokeWidth={2} />
+        <span>{o.label}</span>
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  const KEY = 'dexic-theme'
+
+  function saved(): string {
+    try {
+      return localStorage.getItem(KEY) ?? 'system'
+    } catch {
+      return 'system'
+    }
+  }
+
+  function sync(choice: string) {
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.themeChoice === choice))
+    })
+  }
+
+  function apply(choice: string) {
+    const root = document.documentElement
+    if (choice === 'light' || choice === 'dark') root.dataset.theme = choice
+    else delete root.dataset.theme
+    try {
+      if (choice === 'light' || choice === 'dark') localStorage.setItem(KEY, choice)
+      else localStorage.removeItem(KEY)
+    } catch {
+      // Storage unavailable (private mode) — the choice still applies for this page.
+    }
+    sync(choice)
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((btn) => {
+    btn.addEventListener('click', () => apply(btn.dataset.themeChoice ?? 'system'))
+  })
+  sync(saved())
+</script>
+
+<style>
+  .theme-switch {
+    display: inline-flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--soft);
+  }
+
+  .theme-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .theme-btn:hover {
+    color: var(--fg);
+  }
+
+  .theme-btn[aria-pressed='true'] {
+    background: var(--lime);
+    color: var(--ink);
+  }
+</style>

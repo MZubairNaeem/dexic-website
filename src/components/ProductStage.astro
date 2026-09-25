@@ -1,0 +1,178 @@
+---
+// Product-page hero visual: the product's screen inside a soft circle with
+// orbit lines, its app tile, and three of its real features floating around.
+import OrbitLines from './brand/OrbitLines.astro'
+import ProductScreen from './brand/ProductScreen.astro'
+import FeatureCard from './brand/FeatureCard.astro'
+import AppTile from './brand/AppTile.astro'
+import Sparks from './brand/Sparks.astro'
+import type { Product } from '../data/products'
+import { brandFor } from '../data/brand'
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+const brand = brandFor(product.slug)
+const TILT = [-3, 2.5, -1.5]
+const picks = [0, 2, 4]
+  .map((i) => ({ feature: product.features[i], icon: brand.featureIcons[i] }))
+  .filter((p) => p.feature)
+---
+
+<div class="stage" data-parallax aria-hidden="true">
+  <div class="st-layer px st-circle" style="--depth: 0.25"></div>
+  <div class="st-layer px st-orbit" style="--depth: 0.5"><OrbitLines /></div>
+  <div class="st-layer px st-screen" style="--depth: 0.8">
+    <ProductScreen slug={product.slug} />
+  </div>
+  <div class="st-layer px st-tile" style="--depth: 1.5">
+    <AppTile slug={product.slug} size={78} />
+  </div>
+  {
+    picks.map((p, i) => (
+      <div class={`st-layer px st-card st-card--${i + 1}`} style={`--depth:${1.1 + i * 0.3};--i:${i}`}>
+        <div class="float">
+          <FeatureCard
+            num={p.feature.num}
+            title={p.feature.title}
+            text={p.feature.body}
+            icon={p.icon}
+            tone={i === 1 ? 'violet' : 'lime'}
+            rotate={TILT[i]}
+            size="sm"
+            clamp
+          />
+        </div>
+      </div>
+    ))
+  }
+  <Sparks class="st-sparks" size={54} rotate={-100} delay={900} />
+</div>
+
+<style>
+  .stage {
+    --ps-size: 10px;
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 1 / 1.04;
+    margin-inline: auto;
+    container-type: inline-size;
+  }
+
+  @supports (width: 1cqi) {
+    .stage {
+      --ps-size: 1.9cqi;
+    }
+  }
+
+  .st-layer {
+    position: absolute;
+  }
+
+  .st-circle {
+    left: 8%;
+    top: 7%;
+    width: 84%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, var(--glow), rgba(255, 255, 255, 0) 55%),
+      var(--soft-2);
+  }
+
+  .st-orbit {
+    left: -2%;
+    top: -2%;
+    width: 104%;
+    aspect-ratio: 1;
+  }
+
+  .st-screen {
+    left: 50%;
+    top: 50%;
+    width: 20em;
+    height: 40em;
+    margin: -20em 0 0 -10em;
+    font-size: var(--ps-size);
+    transform: rotate(-4deg);
+  }
+
+  .st-tile {
+    right: 14%;
+    top: 4%;
+    transform: rotate(12deg);
+  }
+
+  .st-card {
+    width: 52%;
+    max-width: 280px;
+  }
+
+  .st-card--1 {
+    left: -8%;
+    top: 14%;
+  }
+
+  .st-card--2 {
+    right: -10%;
+    top: 46%;
+  }
+
+  .st-card--3 {
+    left: -4%;
+    bottom: 6%;
+  }
+
+  .stage :global(.st-sparks) {
+    position: absolute;
+    left: 20%;
+    top: 3%;
+  }
+
+  :global(html.motion) .st-screen {
+    animation: stIn 1s var(--ease-out) both 0.1s;
+  }
+
+  :global(html.motion) .st-card,
+  :global(html.motion) .st-tile {
+    animation: stPop 0.8s var(--ease-spring) both;
+    animation-delay: calc(500ms + var(--i, 3) * 130ms);
+  }
+
+  @keyframes stIn {
+    from {
+      opacity: 0;
+      translate: 0 40px;
+    }
+  }
+
+  @keyframes stPop {
+    from {
+      opacity: 0;
+      scale: 0.8;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .st-card--1 {
+      left: -2%;
+    }
+
+    .st-card--2 {
+      right: -3%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .st-card {
+      width: 60%;
+    }
+
+    .st-card--3 {
+      display: none;
+    }
+  }
+</style>

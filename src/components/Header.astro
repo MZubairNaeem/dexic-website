@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets'
-import logo from '../assets/dexic-logo.png'
+import Wordmark from './brand/Wordmark.astro'
+import Icon from './brand/Icon.astro'
 
 interface Props {
   active?: 'home' | 'product' | 'about' | 'contact' | 'legal'
@@ -9,24 +9,27 @@ interface Props {
 const { active = 'home' } = Astro.props
 const productsActive = active === 'home' || active === 'product'
 const aboutActive = active === 'about'
+const contactActive = active === 'contact'
 ---
 
 <header class="site-header">
   <div class="bar container">
-    <a href="/" class="logo-link" aria-label="Dexic home">
-      <Image src={logo} alt="Dexic" height={28} class="logo-full" />
-      <img src="/D.png" alt="Dexic" height="28" class="logo-mobile" />
-    </a>
-    <nav class="nav">
-      <a href="/#products" class="nav-link" class:list={{ 'is-active': productsActive }}>
-        {productsActive && <span class="dot" aria-hidden="true"></span>}
-        <span>Products</span>
+    <Wordmark href="/" size="sm" class="header-mark" />
+    <nav class="nav" aria-label="Primary">
+      <a href="/#products" class="nav-link" class:list={{ 'is-active': productsActive }}>Products</a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <a href="/about" class="nav-link" class:list={{ 'is-active': aboutActive }} aria-current={aboutActive ? 'page' : undefined}
+        >About</a
+      >
+      <a
+        href="/contact"
+        class="nav-contact"
+        class:list={{ 'is-active': contactActive }}
+        aria-current={contactActive ? 'page' : undefined}
+      >
+        <span class="nav-contact-dot" aria-hidden="true"><Icon name="arrow-right" size={14} strokeWidth={2.4} /></span>
+        <span>Contact</span>
       </a>
-      <a href="/about" class="nav-link" class:list={{ 'is-active': aboutActive }}>
-        {aboutActive && <span class="dot" aria-hidden="true"></span>}
-        <span>About</span>
-      </a>
-      <a href="/contact" class="nav-contact">Contact</a>
     </nav>
   </div>
   <div class="progress-track">
@@ -39,88 +42,100 @@ const aboutActive = active === 'about'
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(10, 10, 10, 0.82);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
+    border-bottom: 1px solid var(--line);
   }
 
   .bar {
-    height: 68px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .logo-link {
-    display: flex;
-    align-items: center;
-    flex: none;
-  }
-
-  .logo-mobile {
-    display: none;
-  }
-
-  @media (max-width: 900px) {
-    .logo-full {
-      display: none;
-    }
-
-    .logo-mobile {
-      display: block;
-    }
+    gap: 20px;
+    height: 80px;
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: 36px;
+    gap: 26px;
   }
 
   .nav-link {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--muted);
-    letter-spacing: 0.01em;
+    isolation: isolate;
+    padding: 6px 2px;
+    color: var(--fg);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
     transition: color 0.2s ease;
+  }
+
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    inset: 3px -7px 3px -5px;
+    z-index: -1;
+    background: var(--lime);
+    transform: scaleX(0) rotate(-2deg);
+    transform-origin: 0 50%;
+    transition: transform 0.45s var(--ease-draw);
   }
 
   .nav-link:hover,
   .nav-link.is-active {
-    color: var(--fg);
+    color: var(--ink);
   }
 
-  .nav-link .dot {
-    width: 4px;
-    height: 4px;
-    background: var(--accent);
-    animation: dexicFade 0.4s ease;
+  .nav-link:hover::before,
+  .nav-link.is-active::before {
+    transform: scaleX(1) rotate(-2deg);
+  }
+
+  .nav-sep {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
   }
 
   .nav-contact {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--fg);
-    letter-spacing: 0.01em;
-    border: 1px solid var(--border-2);
-    border-radius: 6px;
-    padding: 8px 16px;
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease,
-      transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 8px;
+    padding: 5px 18px 5px 5px;
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    transition: transform 0.35s var(--ease-spring);
   }
 
   .nav-contact:hover {
-    border-color: var(--border-5);
-    background: #111111;
-    color: var(--fg);
-    transform: translateY(-1px);
+    transform: translateY(-2px) rotate(-1.5deg);
+  }
+
+  .nav-contact-dot {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--ink);
+    transition: transform 0.4s var(--ease-spring);
+  }
+
+  .nav-contact:hover .nav-contact-dot,
+  .nav-contact.is-active .nav-contact-dot {
+    transform: rotate(-45deg);
   }
 
   .progress-track {
@@ -128,15 +143,70 @@ const aboutActive = active === 'about'
     left: 0;
     right: 0;
     bottom: -1px;
-    height: 1px;
+    height: 2px;
     overflow: hidden;
   }
 
   .progress-bar {
-    height: 1px;
-    background: var(--accent);
+    height: 2px;
+    background: var(--lime);
     transform: scaleX(0);
     transform-origin: 0 50%;
     will-change: transform;
+  }
+
+  @media (max-width: 720px) {
+    .bar {
+      height: 66px;
+    }
+
+    .bar :global(.header-mark .wm-tag) {
+      display: none;
+    }
+
+    .nav {
+      gap: 16px;
+    }
+
+    .nav-link {
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-sep {
+      display: none;
+    }
+
+    .nav-contact {
+      margin-left: 0;
+      padding: 4px 14px 4px 4px;
+      gap: 8px;
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+    }
+
+    .nav-contact-dot {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .nav {
+      gap: 12px;
+    }
+
+    .nav-link,
+    .nav-contact {
+      letter-spacing: 0.1em;
+    }
+
+    .nav-contact {
+      padding: 9px 13px;
+    }
+
+    .nav-contact-dot {
+      display: none;
+    }
   }
 </style>

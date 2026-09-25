@@ -1,26 +1,144 @@
+/* ==========================================================================
+   Dexic design tokens
+   Brand constants never change between themes; theme tokens flip in dark mode.
+   ========================================================================== */
+
 :root {
-  --bg: #0a0a0a;
-  --fg: #ffffff;
-  --muted: #a1a1aa;
-  --dim: #52525b;
-  --border: #1a1a1a;
-  --border-2: #222222;
-  --border-3: #2a2a2a;
-  --border-4: #333333;
-  --border-5: #3f3f46;
-  --accent: #ff2d2d;
-  --card: #111111;
-  --card-hover: #131313;
-  --font-sans: 'Geist', 'SF Pro Display', 'Helvetica Neue', Helvetica, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  /* Brand constants */
+  --ink: #0e0e0e;
+  --paper: #f6f6f2;
+  --white: #ffffff;
+  --lime: #d4f51e;
+  --violet: #6c5cff;
+  --band: #1a1a1a;
+
+  /* Theme: light */
+  color-scheme: light;
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --muted: #6b6b6b;
+  --surface: var(--white);
+  --soft: #eeeee8;
+  --soft-2: #e6e6df;
+  --line: rgba(14, 14, 14, 0.1);
+  --line-strong: rgba(14, 14, 14, 0.22);
+  --grid-line: rgba(14, 14, 14, 0.06);
+  --watermark: rgba(14, 14, 14, 0.05);
+  --glass: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --shadow-lift: 0 22px 44px rgba(0, 0, 0, 0.1);
+  --danger: #c4261b;
+  --cursor-blend: multiply;
+  --glow: rgba(255, 255, 255, 0.55);
+  /* Small accent text: ink on a lime marker in light, plain lime in dark */
+  --mark-text: var(--ink);
+  --mark-bg: var(--lime);
+  --violet-text: var(--violet);
+
+  /* Shape */
+  --radius-card: 18px;
+  --radius-lg: 28px;
+
+  /* Type */
+  --font-shout: 'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: 'Kalam', 'Bradley Hand', 'Comic Sans MS', cursive;
+
+  /* Layout */
+  --gutter: 32px;
+  --content: 1200px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --ease-draw: cubic-bezier(0.65, 0.05, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --gutter: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: var(--ink);
+    --fg: var(--paper);
+    --muted: #a3a3a0;
+    --surface: #171717;
+    --soft: #1c1c1c;
+    --soft-2: #232323;
+    --line: rgba(246, 246, 242, 0.1);
+    --line-strong: rgba(246, 246, 242, 0.24);
+    --grid-line: rgba(246, 246, 242, 0.05);
+    --watermark: rgba(246, 246, 242, 0.045);
+    --glass: rgba(23, 23, 23, 0.62);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --shadow-lift: 0 22px 44px rgba(0, 0, 0, 0.65);
+    --danger: #ff7a6e;
+    --cursor-blend: difference;
+    --glow: rgba(255, 255, 255, 0.04);
+    --mark-text: var(--lime);
+    --mark-bg: transparent;
+    --violet-text: var(--paper);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: var(--ink);
+  --fg: var(--paper);
+  --muted: #a3a3a0;
+  --surface: #171717;
+  --soft: #1c1c1c;
+  --soft-2: #232323;
+  --line: rgba(246, 246, 242, 0.1);
+  --line-strong: rgba(246, 246, 242, 0.24);
+  --grid-line: rgba(246, 246, 242, 0.05);
+  --watermark: rgba(246, 246, 242, 0.045);
+  --glass: rgba(23, 23, 23, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lift: 0 22px 44px rgba(0, 0, 0, 0.65);
+  --danger: #ff7a6e;
+  --cursor-blend: difference;
+  --glow: rgba(255, 255, 255, 0.04);
+  --mark-text: var(--lime);
+  --mark-bg: transparent;
+  --violet-text: var(--paper);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 [hidden] {
   display: none !important;
+}
+
+[id] {
+  scroll-margin-top: 96px;
 }
 
 body {
@@ -29,102 +147,133 @@ body {
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 a {
-  color: var(--fg);
+  color: inherit;
   text-decoration: none;
 }
 
-a:hover {
-  color: var(--accent);
+::selection {
+  background: var(--lime);
+  color: var(--ink);
 }
 
-::selection {
-  background: var(--accent);
-  color: #fff;
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+  border-radius: 6px;
 }
 
 input,
 textarea,
-button {
+button,
+select {
   font-family: inherit;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--dim);
-}
-
-input:focus,
-textarea:focus {
-  outline: none;
-  border-color: var(--border-5);
-}
-
-[data-reveal].reveal-pending {
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
-    transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
-}
-
-[data-reveal].is-visible {
+  color: var(--muted);
   opacity: 1;
-  transform: none;
 }
 
-@keyframes dexicDrift {
-  0% {
-    transform: translateY(-14px);
-    opacity: 0;
-  }
-  12% {
-    opacity: 0.55;
-  }
-  88% {
-    opacity: 0.55;
-  }
-  100% {
-    transform: translateY(300px);
-    opacity: 0;
+/* ==========================================================================
+   Scroll-driven reveal. `html.motion` is set by an inline head script only
+   when motion is allowed, so content stays visible if JS never runs.
+   ========================================================================== */
+
+html.motion [data-reveal]:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+html.motion [data-reveal].is-visible {
+  transition:
+    opacity 0.8s var(--ease-out) var(--reveal-delay, 0ms),
+    transform 0.8s var(--ease-out) var(--reveal-delay, 0ms);
+}
+
+/* ==========================================================================
+   Keyframes
+   ========================================================================== */
+
+@keyframes dexicSpin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes dexicDriftX {
+@keyframes dexicSpinBack {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes dexicFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes dexicWobble {
   0% {
-    transform: translateX(0);
-    opacity: 0;
+    transform: rotate(0deg);
   }
-  15% {
-    opacity: 0.4;
+  25% {
+    transform: rotate(-4deg);
   }
-  85% {
-    opacity: 0.4;
+  55% {
+    transform: rotate(3deg);
+  }
+  80% {
+    transform: rotate(-1.5deg);
   }
   100% {
-    transform: translateX(210px);
-    opacity: 0;
+    transform: rotate(0deg);
   }
 }
 
 @keyframes dexicPulse {
   0%,
   100% {
-    opacity: 0.25;
+    opacity: 1;
+    transform: scale(1);
   }
   50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes dexicHalo {
+  0% {
+    transform: scale(0.6);
     opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
   }
 }
 
 @keyframes dexicRise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(26px);
   }
   to {
     opacity: 1;
@@ -132,34 +281,27 @@ textarea:focus {
   }
 }
 
-@keyframes dexicFade {
-  from {
-    opacity: 0;
-  }
+@keyframes dexicMarquee {
   to {
-    opacity: 1;
+    transform: translateX(-50%);
   }
 }
 
-@keyframes dexicSpin {
-  from {
-    transform: rotate(45deg);
+@keyframes dexicScan {
+  0%,
+  100% {
+    transform: translateY(0);
   }
-  to {
-    transform: rotate(405deg);
-  }
-}
-
-@keyframes dexicSpinBack {
-  from {
-    transform: rotate(45deg);
-  }
-  to {
-    transform: rotate(-315deg);
+  50% {
+    transform: translateY(var(--scan-distance, 10em));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
