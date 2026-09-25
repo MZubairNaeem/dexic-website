@@ -163,10 +163,43 @@ const { title, description, active = 'legal' } = Astro.props
         }
       }
 
+      // Landing on a page with a URL fragment (e.g. /#products from another
+      // page) should jump straight to that section. Chrome's own "scroll to
+      // fragment on load" can silently fail here: our web fonts are still
+      // downloading when it fires, and once they swap in and reflow the page
+      // above the target, the browser never retries — it's left at the top.
+      // We do it ourselves, and keep re-asserting the position for a few
+      // seconds until it actually holds (a single correction can itself get
+      // undone by a later reflow).
+      function initHashScroll() {
+        if (!location.hash) return
+        let target: Element | null
+        try {
+          target = document.querySelector(location.hash)
+        } catch {
+          return
+        }
+        if (!target) return
+        const el = target
+
+        const offset = () => parseFloat(getComputedStyle(el).scrollMarginTop) || 0
+        const settled = () => Math.abs(el.getBoundingClientRect().top - offset()) < 4
+
+        let attempts = 0
+        const tick = () => {
+          if (settled() || attempts >= 40) return
+          el.scrollIntoView({ behavior: 'auto', block: 'start' })
+          attempts += 1
+          setTimeout(tick, 150)
+        }
+        tick()
+      }
+
       initProgressBar()
       initScrollMotion()
       initParallax()
       initFaq()
+      initHashScroll()
     </script>
   </body>
 </html>

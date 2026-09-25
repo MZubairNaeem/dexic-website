@@ -131,6 +131,10 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Stop the browser from "correcting" our scroll position as web fonts
+     swap in above the fold and reflow the page — see initHashScroll() in
+     Layout.astro, which depends on our scroll to the fragment sticking. */
+  overflow-anchor: none;
 }
 
 [hidden] {
