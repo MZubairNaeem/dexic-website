@@ -1,6 +1,7 @@
 ---
-// Light / Auto / Dark segmented switch. The saved choice is applied before
-// first paint by the inline script in Layout.astro.
+// Light / Auto / Dark segmented switch. Light is the default; the saved
+// choice (if any) is applied before first paint by Layout.astro's inline
+// script, which this component's own script stays in sync with.
 import Icon from './Icon.astro'
 import type { IconName } from './icons'
 
@@ -14,7 +15,7 @@ const OPTIONS: { value: string; label: string; icon: IconName }[] = [
 <div class="theme-switch" role="group" aria-label="Colour theme">
   {
     OPTIONS.map((o) => (
-      <button type="button" class="theme-btn" data-theme-choice={o.value} aria-pressed={o.value === 'system' ? 'true' : 'false'}>
+      <button type="button" class="theme-btn" data-theme-choice={o.value} aria-pressed={o.value === 'light' ? 'true' : 'false'}>
         <Icon name={o.icon} size={14} strokeWidth={2} />
         <span>{o.label}</span>
       </button>
@@ -25,11 +26,14 @@ const OPTIONS: { value: string; label: string; icon: IconName }[] = [
 <script>
   const KEY = 'dexic-theme'
 
+  // Mirrors the default in Layout.astro's inline script: light unless the
+  // visitor explicitly saved 'dark' or 'system' (follow the OS).
   function saved(): string {
     try {
-      return localStorage.getItem(KEY) ?? 'system'
+      const stored = localStorage.getItem(KEY)
+      return stored === 'dark' || stored === 'system' ? stored : 'light'
     } catch {
-      return 'system'
+      return 'light'
     }
   }
 
@@ -39,21 +43,28 @@ const OPTIONS: { value: string; label: string; icon: IconName }[] = [
     })
   }
 
+  function syncThemeColor(choice: string) {
+    const meta = document.getElementById('theme-color-meta')
+    if (!meta) return
+    const isDark = choice === 'dark' || (choice === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    meta.setAttribute('content', isDark ? '#0e0e0e' : '#f6f6f2')
+  }
+
   function apply(choice: string) {
     const root = document.documentElement
-    if (choice === 'light' || choice === 'dark') root.dataset.theme = choice
-    else delete root.dataset.theme
+    if (choice === 'system') delete root.dataset.theme
+    else root.dataset.theme = choice
     try {
-      if (choice === 'light' || choice === 'dark') localStorage.setItem(KEY, choice)
-      else localStorage.removeItem(KEY)
+      localStorage.setItem(KEY, choice)
     } catch {
       // Storage unavailable (private mode) — the choice still applies for this page.
     }
     sync(choice)
+    syncThemeColor(choice)
   }
 
   document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((btn) => {
-    btn.addEventListener('click', () => apply(btn.dataset.themeChoice ?? 'system'))
+    btn.addEventListener('click', () => apply(btn.dataset.themeChoice ?? 'light'))
   })
   sync(saved())
 </script>

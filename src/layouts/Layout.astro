@@ -24,8 +24,7 @@ const { title, description, active = 'legal' } = Astro.props
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#f6f6f2" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0e0e0e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f6f2" id="theme-color-meta" />
     <link rel="icon" href="/D.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/D.png" />
@@ -38,12 +37,24 @@ const { title, description, active = 'legal' } = Astro.props
     <script is:inline>
       ;(() => {
         const root = document.documentElement
+        // The site opens in light mode by default. Only an explicit saved
+        // choice of 'dark' or 'system' (follow the OS) overrides that.
+        let choice = 'light'
         try {
-          const theme = localStorage.getItem('dexic-theme')
-          if (theme === 'light' || theme === 'dark') root.dataset.theme = theme
+          const stored = localStorage.getItem('dexic-theme')
+          if (stored === 'dark' || stored === 'system') choice = stored
         } catch {
-          // Storage blocked: fall back to the system theme.
+          // Storage blocked: default to light.
         }
+        if (choice === 'system') delete root.dataset.theme
+        else root.dataset.theme = choice
+
+        const meta = document.getElementById('theme-color-meta')
+        if (meta) {
+          const isDark = choice === 'dark' || (choice === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          meta.setAttribute('content', isDark ? '#0e0e0e' : '#f6f6f2')
+        }
+
         // Motion is opt-in: scroll reveals only hide content once we know JS
         // and IntersectionObserver are available. Fallback un-hides everything.
         if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
