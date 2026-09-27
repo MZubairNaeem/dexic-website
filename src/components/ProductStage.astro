@@ -24,7 +24,7 @@ const picks = [0, 2, 4]
 <div class="stage" data-parallax aria-hidden="true">
   <div class="st-layer px st-circle" style="--depth: 0.25"></div>
   <div class="st-layer px st-orbit" style="--depth: 0.5"><OrbitLines /></div>
-  <div class="st-layer px st-screen" style="--depth: 0.8">
+  <div class="px st-screen" style="--depth: 0.8">
     <ProductScreen slug={product.slug} />
   </div>
   <div class="st-layer px st-tile" style="--depth: 1.5">
@@ -55,6 +55,8 @@ const picks = [0, 2, 4]
   .stage {
     --ps-size: 10px;
     position: relative;
+    display: grid;
+    place-items: center;
     width: 100%;
     max-width: 560px;
     aspect-ratio: 1 / 1.04;
@@ -90,12 +92,10 @@ const picks = [0, 2, 4]
     aspect-ratio: 1;
   }
 
+  /* Grid-stacked (not fixed-size + negative-margin) so this centers
+     correctly whether the screen is phone- or browser-window-shaped. */
   .st-screen {
-    left: 50%;
-    top: 50%;
-    width: 20em;
-    height: 40em;
-    margin: -20em 0 0 -10em;
+    grid-area: 1 / 1;
     font-size: var(--ps-size);
     transform: rotate(-4deg);
   }
