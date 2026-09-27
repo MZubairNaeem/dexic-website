@@ -46,55 +46,95 @@ const bars = [38, 60, 46, 72, 54, 80, 66, 94]
   {...rest}
 >
   <div class="ps-screen">
-    <div class="ps-status">
-      <span>9:41</span>
-      <span class="ps-notch"></span>
-      <span class="ps-signal"><i></i><i></i><i></i></span>
-    </div>
+    {
+      slug !== 'stacship' && (
+        <div class="ps-status">
+          <span>9:41</span>
+          <span class="ps-notch"></span>
+          <span class="ps-signal">
+            <i />
+            <i />
+            <i />
+          </span>
+        </div>
+      )
+    }
 
     {
       slug === 'stacship' && (
-        <div class="ps-body">
-          <div class="ps-head">
+        <div class="ps-chrome">
+          <span class="ps-chrome-dot" />
+          <span class="ps-chrome-dot" />
+          <span class="ps-chrome-dot" />
+          <span class="ps-url">
+            <Icon name="lock" strokeWidth={2.4} />
+            app.stacship.io
+          </span>
+        </div>
+      )
+    }
+
+    {
+      slug === 'stacship' && (
+        <div class="ps-web">
+          <nav class="ps-nav">
             <span class={`ps-tile ps-tile--${brand.tone}`}>
               <Icon name={brand.icon} strokeWidth={2.2} />
             </span>
-            <span class="ps-app">StacShip</span>
-            <span class="ps-pill ps-pill--lime">prod</span>
-          </div>
-          <span class="ps-kicker">Deploy · main</span>
-          <ul class="ps-steps">
-            <li>
-              <span class="ps-check">
-                <Icon name="check" strokeWidth={3} />
-              </span>
-              Build<span class="ps-meta">0:42</span>
-            </li>
-            <li>
-              <span class="ps-check">
-                <Icon name="check" strokeWidth={3} />
-              </span>
-              Release
-            </li>
-            <li>
-              <span class="ps-check">
-                <Icon name="check" strokeWidth={3} />
-              </span>
-              TLS certificate
-            </li>
-            <li class="is-live">
-              <span class="ps-live" />
-              Live<span class="ps-meta">production</span>
-            </li>
-          </ul>
-          <div class="ps-chart">
-            {bars.map((h) => (
-              <i style={`height:${h}%`} />
-            ))}
-          </div>
-          <div class="ps-actions">
-            <span>Logs</span>
-            <span class="is-solid">Rollback</span>
+            <span class="ps-nav-item is-active">
+              <Icon name="grid" strokeWidth={2} />
+            </span>
+            <span class="ps-nav-item">
+              <Icon name="git-branch" strokeWidth={2} />
+            </span>
+            <span class="ps-nav-item">
+              <Icon name="terminal" strokeWidth={2} />
+            </span>
+            <span class="ps-nav-item">
+              <Icon name="sliders" strokeWidth={2} />
+            </span>
+          </nav>
+          <div class="ps-main">
+            <div class="ps-head">
+              <span class="ps-app">StacShip</span>
+              <span class="ps-pill ps-pill--lime">prod</span>
+            </div>
+            <span class="ps-kicker">Deploy · main</span>
+            <div class="ps-web-grid">
+              <ul class="ps-steps">
+                <li>
+                  <span class="ps-check">
+                    <Icon name="check" strokeWidth={3} />
+                  </span>
+                  Build<span class="ps-meta">0:42</span>
+                </li>
+                <li>
+                  <span class="ps-check">
+                    <Icon name="check" strokeWidth={3} />
+                  </span>
+                  Release
+                </li>
+                <li>
+                  <span class="ps-check">
+                    <Icon name="check" strokeWidth={3} />
+                  </span>
+                  TLS certificate
+                </li>
+                <li class="is-live">
+                  <span class="ps-live" />
+                  Live<span class="ps-meta">production</span>
+                </li>
+              </ul>
+              <div class="ps-chart">
+                {bars.map((h) => (
+                  <i style={`height:${h}%`} />
+                ))}
+              </div>
+            </div>
+            <div class="ps-actions">
+              <span>Logs</span>
+              <span class="is-solid">Rollback</span>
+            </div>
           </div>
         </div>
       )
@@ -191,9 +231,11 @@ const bars = [38, 60, 46, 72, 54, 80, 66, 94]
 
 <style>
   .ps {
+    --ps-w: 20em;
+    --ps-h: 40em;
     position: relative;
-    width: 20em;
-    height: 40em;
+    width: var(--ps-w);
+    height: var(--ps-h);
     padding: 0.7em;
     border-radius: 3.3em;
     background: var(--ink);
@@ -205,6 +247,19 @@ const bars = [38, 60, 46, 72, 54, 80, 66, 94]
     font-family: var(--font-sans);
     line-height: 1.2;
     user-select: none;
+  }
+
+  /* StacShip is a web app, not a mobile one — a browser window, not a
+     phone-in-a-case. Wide aspect ratio, thin bezel, no notch/status bar. */
+  .ps--stacship {
+    --ps-w: 34em;
+    --ps-h: 23.5em;
+    padding: 0;
+    border-radius: 1em;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 2.4em 5em rgba(0, 0, 0, 0.22),
+      0 0.6em 1.6em rgba(0, 0, 0, 0.14);
   }
 
   .ps-screen {
@@ -219,6 +274,7 @@ const bars = [38, 60, 46, 72, 54, 80, 66, 94]
   }
 
   .ps--stacship .ps-screen {
+    border-radius: 1em;
     background: #121212;
     color: #f2f2ee;
   }
@@ -457,6 +513,122 @@ const bars = [38, 60, 46, 72, 54, 80, 66, 94]
     display: flex;
     gap: 0.6em;
     margin-top: auto;
+  }
+
+  /* Browser chrome bar (traffic-light dots + address pill) replaces the
+     phone status bar for StacShip's web dashboard. */
+  .ps-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    height: 2.3em;
+    padding: 0 1.1em;
+    background: #1a1a1a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .ps-chrome-dot {
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .ps-url {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    margin: 0 auto;
+    padding: 0.28em 1.1em;
+    border-radius: 1em;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(242, 242, 238, 0.5);
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .ps-url :global(svg) {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  /* Sidebar + main dashboard layout */
+  .ps-web {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ps-nav {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6em;
+    width: 4.2em;
+    padding: 1.1em 0;
+    background: #161616;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .ps-nav .ps-tile {
+    margin-bottom: 0.3em;
+  }
+
+  .ps-nav-item {
+    display: grid;
+    place-items: center;
+    width: 2.2em;
+    height: 2.2em;
+    border-radius: 0.7em;
+    color: rgba(242, 242, 238, 0.4);
+  }
+
+  .ps-nav-item :global(svg) {
+    width: 1.05em;
+    height: 1.05em;
+  }
+
+  .ps-nav-item.is-active {
+    background: rgba(212, 245, 30, 0.14);
+    color: var(--lime);
+  }
+
+  .ps-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.2em 1.4em 1.1em;
+  }
+
+  .ps-web .ps-kicker {
+    margin-top: 0.7em;
+  }
+
+  .ps-web-grid {
+    display: flex;
+    gap: 1.3em;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ps-web-grid .ps-steps {
+    flex: 1.15;
+    gap: 0.4em;
+    margin-top: 0;
+  }
+
+  .ps-web-grid .ps-steps li {
+    padding: 0.5em 0.75em;
+    font-size: 0.98em;
+  }
+
+  .ps-web-grid .ps-chart {
+    flex: 1;
+    height: auto;
+    margin-top: 0;
   }
 
   .ps-actions span {

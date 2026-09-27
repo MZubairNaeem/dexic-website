@@ -103,15 +103,14 @@ const SCREENS = [
 
   .hv-screens {
     inset: 0;
+    display: grid;
+    place-items: center;
   }
 
+  /* Grid-stacked (not fixed-size + negative-margin) so this centers
+     correctly whether the screen is phone- or browser-window-shaped. */
   .hv-screen {
-    position: absolute;
-    left: 50%;
-    top: 49%;
-    width: 20em;
-    height: 40em;
-    margin: -20em 0 0 -10em;
+    grid-area: 1 / 1;
     font-size: var(--ps-size);
   }
 
