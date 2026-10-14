@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Dexic LinkedIn Banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Anton&family=Kalam:wght@400;700&family=Manrope:wght@400..800&family=Playfair+Display:ital,wght@0,700..900;1,700..900&display=block"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --paper: #f6f6f2;
+    --white: #ffffff;
+    --lime: #d4f51e;
+    --violet: #6c5cff;
+    --band: #1a1a1a;
+    --muted: #6b6b6b;
+    --font-shout: 'Anton', Impact, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+    --font-hand: 'Kalam', 'Bradley Hand', cursive;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+
+  .banner {
+    position: relative;
+    overflow: hidden;
+    width: 1584px;
+    height: 396px;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(14, 14, 14, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 14, 14, 0.055) 1px, transparent 1px);
+    background-size: 44px 44px;
+    background-position: -1px -1px;
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  /* ---------- Wordmark ---------- */
+  .wm { position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; line-height: 1; }
+  .wm-logo { display: block; height: 42px; width: auto; }
+  .wm-name { display: inline-flex; align-items: baseline; font-size: 44px; font-weight: 800; letter-spacing: -0.055em; }
+  .wm-dot { width: 0.25em; height: 0.25em; margin-left: 0.07em; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 1.5px var(--ink); }
+  .wm-tag { display: inline-flex; align-items: center; gap: 10px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; }
+  .wm-line { width: 22px; height: 3px; border-radius: 2px; background: var(--ink); }
+
+  /* ---------- Headline ---------- */
+  .head { position: absolute; }
+  .kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 12.5px; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; }
+  .kicker::before { content: ''; width: 28px; height: 3px; border-radius: 2px; background: var(--violet); }
+  .serif { display: block; font-family: var(--font-serif); font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+  .serif i { font-style: italic; font-weight: 800; color: var(--violet); }
+  .shout { display: block; font-family: var(--font-shout); font-weight: 400; text-transform: uppercase; letter-spacing: 0.005em; line-height: 1; white-space: nowrap; }
+  .blk { position: relative; display: inline-block; isolation: isolate; padding: 0.04em 0.12em 0; }
+  .blk::before { content: ''; position: absolute; inset: 0 -0.02em; z-index: -1; background: var(--lime); transform: rotate(var(--r, -1.6deg)); box-shadow: 4px 5px 0 var(--ink); }
+  .spark-anchor { position: relative; display: inline-block; }
+  .sparks { position: absolute; overflow: visible; }
+  .sparks path { fill: none; stroke: var(--ink); stroke-width: 3.6; stroke-linecap: round; }
+
+  /* ---------- Handwritten note ---------- */
+  .note { position: absolute; font-family: var(--font-hand); font-weight: 700; color: var(--ink); line-height: 1.05; transform: rotate(-4deg); white-space: nowrap; }
+  .note b { color: var(--violet); font-weight: 700; }
+  .note-arrow { position: absolute; overflow: visible; }
+  .note-arrow path { fill: none; stroke: var(--violet); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .note-arrow .shaft { stroke-dasharray: 6 7; }
+
+  /* ---------- URL pill ---------- */
+  .url { position: absolute; display: inline-flex; align-items: center; gap: 10px; padding: 8px 8px 8px 18px; border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 800; letter-spacing: 0.02em; }
+  .url-arrow { display: grid; place-items: center; border-radius: 50%; background: var(--lime); color: var(--ink); }
+  .url-arrow svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Tapes ---------- */
+  .tape { position: absolute; left: 0; top: 0; display: flex; align-items: center; overflow: hidden; white-space: nowrap; transform-origin: 0 0; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14); }
+  .tape span { display: inline-flex; align-items: center; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; }
+  .tape span::after { content: ''; display: inline-block; flex: none; border-radius: 50%; }
+  .tape--lime { background: var(--lime); color: var(--ink); }
+  .tape--lime span::after { background: var(--violet); }
+  .tape--ink { background: var(--band); color: var(--paper); }
+  .tape--ink span::after { background: var(--lime); }
+
+  /* ---------- Spinning-text badge ---------- */
+  .badge { position: absolute; border-radius: 50%; background: var(--violet); box-shadow: 0 0 0 4px var(--paper), 0 0 0 6.5px var(--ink), 6px 8px 0 6.5px var(--ink); }
+  .badge svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge text { fill: var(--white); font-family: var(--font-sans); font-weight: 800; text-transform: uppercase; }
+  .badge-core { position: absolute; inset: 27%; display: grid; place-items: center; border-radius: 50%; background: var(--lime); box-shadow: inset 0 0 0 2.5px var(--ink); }
+  .badge-core svg { position: static; width: 52%; height: 52%; fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Product stickers ---------- */
+  .sticker { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 7px; transform: rotate(var(--r, 0deg)); }
+  .tile { display: grid; place-items: center; width: var(--s); height: var(--s); border-radius: calc(var(--s) * 0.28); background-image: linear-gradient(160deg, rgba(255,255,255,0.24), rgba(255,255,255,0) 55%); box-shadow: 0 0 0 4px var(--white), 0 0 0 5.5px rgba(14,14,14,0.12), 0 12px 22px rgba(0,0,0,0.18); }
+  .tile svg { width: 50%; height: 50%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .tile--ink { background-color: var(--ink); color: var(--lime); }
+  .tile--lime { background-color: var(--lime); color: var(--ink); }
+  .tile--violet { background-color: var(--violet); color: var(--white); }
+  .tag { padding: 4px 10px 5px; border-radius: 999px; background: var(--white); box-shadow: 0 0 0 1.5px var(--ink); font-weight: 800; letter-spacing: -0.01em; white-space: nowrap; }
+
+  .watermark { position: absolute; font-weight: 800; letter-spacing: -0.06em; line-height: 0.8; color: rgba(14, 14, 14, 0.045); white-space: nowrap; pointer-events: none; }
+
+  /* ======================================================================
+     PROFILE — 1584 × 396 (bottom-left is covered by the profile photo)
+     ====================================================================== */
+  .profile .watermark { display: none; }
+  .profile .wm { left: 64px; top: 54px; }
+
+  .profile .head { left: 440px; top: 54px; }
+  .profile .kicker { margin-bottom: 16px; }
+  .profile .serif { font-size: 56px; }
+  .profile .shout { margin-top: 14px; font-size: 92px; }
+  .profile .shout > .spark-anchor + .spark-anchor { margin-left: 20px; }
+  .profile .sparks:not(.sparks--lead) { display: none; }
+  .profile .sparks--lead { left: -50px; top: -34px; width: 48px; height: 48px; transform: scaleX(-1); }
+
+  .profile .note { left: 520px; top: 318px; font-size: 25px; }
+  .profile .note-arrow { left: 446px; top: 272px; width: 80px; height: 80px; }
+
+  .profile .url { left: 1000px; top: 320px; font-size: 17px; }
+  .profile .url-arrow { width: 32px; height: 32px; }
+
+  .profile .tape { height: 44px; }
+  .profile .tape span { font-size: 14px; gap: 22px; padding-right: 22px; }
+  .profile .tape span::after { width: 8px; height: 8px; }
+  .profile .tape--ink { transform: translate(1270px, -70px) rotate(58deg); width: 640px; }
+  .profile .tape--lime { transform: translate(1240px, 470px) rotate(-62deg); width: 640px; }
+
+  .profile .badge { left: 1322px; top: 108px; width: 176px; height: 176px; }
+  .profile .badge text { font-size: 15.5px; }
+
+  .profile .st-1 { left: 1196px; top: 40px; --r: -9deg; }
+  .profile .st-2 { left: 1474px; top: 26px; --r: 8deg; }
+  .profile .st-3 { left: 1474px; top: 262px; --r: -6deg; }
+  .profile .tile { --s: 66px; }
+  .profile .tag { font-size: 13px; }
+
+  /* ======================================================================
+     COMPANY — 1128 × 191 (logo overlaps the bottom-left)
+     ====================================================================== */
+  .company { width: 1128px; height: 191px; background-size: 32px 32px; }
+  .company .watermark { display: none; }
+  .company .url { display: none; }
+  .company .note-arrow { display: none; }
+  .company .sparks--lead { display: none; }
+  .company .wm { display: none; }
+
+  .company .head { left: 214px; top: 26px; }
+  .company .kicker { margin-bottom: 9px; font-size: 9.5px; gap: 9px; }
+  .company .kicker::before { width: 20px; height: 2.5px; }
+  .company .serif { font-size: 33px; }
+  .company .shout { margin-top: 7px; font-size: 62px; }
+  .company .blk::before { box-shadow: 3px 3px 0 var(--ink); }
+  .company .shout > .spark-anchor + .spark-anchor { margin-left: 14px; }
+  .company .sparks { left: 100%; bottom: 72%; width: 32px; height: 32px; }
+
+  .company .note { left: 600px; top: 20px; font-size: 17px; line-height: 1.1; transform: rotate(-5deg); }
+  .company .note b { display: block; padding-left: 14px; }
+  .company .note-arrow { left: 596px; top: 70px; width: 60px; height: 44px; }
+
+  .company .url { left: 694px; top: 132px; font-size: 13px; gap: 8px; padding: 6px 6px 6px 14px; }
+  .company .url-arrow { width: 24px; height: 24px; }
+
+  .company .tape { height: 28px; }
+  .company .tape span { font-size: 10px; gap: 15px; padding-right: 15px; }
+  .company .tape span::after { width: 6px; height: 6px; }
+  .company .tape--ink { transform: translate(890px, -40px) rotate(50deg); width: 360px; }
+  .company .tape--lime { transform: translate(930px, 245px) rotate(-56deg); width: 360px; }
+
+  .company .badge { left: 920px; top: 42px; width: 108px; height: 108px; box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink), 4px 5px 0 5px var(--ink); }
+  .company .badge text { font-size: 15.5px; }
+
+  .company .st-1 { left: 842px; top: 18px; --r: -9deg; }
+  .company .st-2 { left: 1052px; top: 14px; --r: 8deg; }
+  .company .st-3 { left: 1052px; top: 116px; --r: -6deg; }
+  .company .tile { --s: 40px; box-shadow: 0 0 0 3px var(--white), 0 0 0 4px rgba(14,14,14,0.12), 0 8px 14px rgba(0,0,0,0.16); }
+  .company .tag { display: none; }
+</style>
+</head>
+<body>
+<div class="banner" id="banner">
+  <div class="watermark" aria-hidden="true">Dexic</div>
+
+  <!-- Tapes (behind everything on the right) -->
+  <div class="tape tape--ink" id="tapeInk"></div>
+  <div class="tape tape--lime" id="tapeLime"></div>
+
+  <!-- Wordmark -->
+  <div class="wm">
+    <svg class="wm-logo" viewBox="0 0 342.25 100" aria-label="Dexic"><path d="M0 0H50A50 50 0 0 1 50 100H0Z" fill="#0e0e0e"/><circle cx="53" cy="50" r="29" fill="#d4f51e"/><path d="M177.41 70.5A36 36 0 1 0 170.37 86.16L156.58 75.39A18.5 18.5 0 0 1 124.68 70.5L177.41 70.5ZM159.32 57.5L124.68 57.5A18.5 18.5 0 0 1 159.32 57.5Z" fill="#0e0e0e" fill-rule="evenodd"/><path d="M184 28H204.23L246 100H225.77ZM246 28L204.23 100H184L225.77 28Z" fill="#0e0e0e"/><path d="M254 28H271.5V100H254Z" fill="#0e0e0e"/><circle cx="262.75" cy="11.5" r="9.5" fill="#0e0e0e"/><path d="M342.25 39.91A36 36 0 1 0 342.25 88.09L329.25 76.38A18.5 18.5 0 1 1 329.25 51.62Z" fill="#0e0e0e"/></svg>
+    <span class="wm-tag"><span class="wm-line"></span>Build • Execute • Initiate</span>
+  </div>
+
+  <!-- Headline -->
+  <div class="head">
+    <span class="kicker">A product company</span>
+    <span class="serif">Building products <i>that</i></span>
+    <span class="shout"
+      ><span class="spark-anchor"><svg class="sparks sparks--lead" viewBox="0 0 48 48"><path d="M17.6 38.9 38.8 33.2" /><path d="M14.5 33.5 30 18" /><path d="M9.1 30.4 14.8 9.1" /></svg><span class="blk" style="--r:-1.8deg">Remove</span></span
+      ><span class="spark-anchor"
+        ><span class="blk" style="--r:1deg">Complexity.</span
+        ><svg class="sparks" viewBox="0 0 48 48"
+          ><path d="M17.6 38.9 38.8 33.2" /><path d="M14.5 33.5 30 18" /><path d="M9.1 30.4 14.8 9.1" /></svg></span
+    ></span>
+  </div>
+
+  <!-- Handwritten note + arrow -->
+  <svg class="note-arrow" viewBox="0 0 80 80">
+    <path class="shaft" d="M66 64C24 70 10 46 28 12" />
+    <path d="M16 20 29 9l7 15" />
+  </svg>
+  <div class="note">ideas are common. <b>execution is rare.</b></div>
+
+  <!-- URL -->
+  <div class="url">dexic.tech
+    <span class="url-arrow"><svg viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></svg></span>
+  </div>
+
+  <!-- Badge -->
+  <div class="badge">
+    <svg viewBox="0 0 176 176">
+      <defs><path id="ring" d="M88 88m-66 0a66 66 0 1 1 132 0a66 66 0 1 1-132 0" /></defs>
+      <text><textPath href="#ring" textLength="414" lengthAdjust="spacing">Build • Execute • Initiate • Ship •</textPath></text>
+    </svg>
+    <div class="badge-core"><svg viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></svg></div>
+  </div>
+
+  <!-- Product stickers -->
+  <div class="sticker st-1">
+    <span class="tile tile--ink"><svg viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+    <span class="tag">StacShip</span>
+  </div>
+  <div class="sticker st-2">
+    <span class="tile tile--lime"><svg viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="8" y="8" width="8" height="8" rx="2"/></svg></span>
+    <span class="tag">TableSnap</span>
+  </div>
+  <div class="sticker st-3">
+    <span class="tile tile--violet"><svg viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg></span>
+    <span class="tag">Woofy</span>
+  </div>
+</div>
+
+<script>
+  const size = (location.hash || '#profile').slice(1)
+  document.getElementById('banner').classList.add(size)
+
+  const fill = (el, items) => {
+    el.innerHTML = Array.from({ length: 6 }, () => items).flat().map((t) => `<span>${t}</span>`).join('')
+  }
+  fill(document.getElementById('tapeLime'), ['Build', 'Execute', 'Initiate'])
+  fill(document.getElementById('tapeInk'), ['Product Design', 'Product Engineering', 'Backend Systems', 'Cloud Infrastructure', 'Developer Experience'])
+</script>
+</body>
+</html>
