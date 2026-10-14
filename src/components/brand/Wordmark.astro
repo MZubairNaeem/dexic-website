@@ -1,6 +1,8 @@
 ---
-// "Dexic." — bold sans with a lime dot, plus an optional tracked tagline
-// that starts with a short lime line.
+// Dexic Core logo — geometric D with a lime core, plus an optional tracked
+// tagline that starts with a short lime line. Letters follow the text colour.
+import { LOGO } from './logo'
+
 interface Props {
   href?: string
   size?: 'sm' | 'md' | 'lg'
@@ -18,7 +20,20 @@ const Tag = href ? 'a' : 'div'
   aria-label={href ? 'Dexic home' : undefined}
   {...rest}
 >
-  <span class="wm-name">Dexic<span class="wm-dot" aria-hidden="true"></span></span>
+  <svg
+    class="wm-logo"
+    viewBox={`0 0 ${LOGO.width} 100`}
+    fill="currentColor"
+    role={href ? undefined : 'img'}
+    aria-label={href ? undefined : 'Dexic'}
+    aria-hidden={href ? 'true' : undefined}
+    focusable="false"
+  >
+    <path d={LOGO.d}></path>
+    <circle class="wm-core" cx={LOGO.core.cx} cy={LOGO.core.cy} r={LOGO.core.r}></circle>
+    <path d={LOGO.e} fill-rule="evenodd"></path>
+    <path d={LOGO.xic}></path>
+  </svg>
   {
     tagline && (
       <span class="wm-tag" aria-hidden="true">
@@ -31,51 +46,48 @@ const Tag = href ? 'a' : 'div'
 
 <style>
   .wordmark {
-    --wm-size: 34px;
+    /* Logo height (= cap height of the D) */
+    --wm-h: 28px;
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: calc(var(--wm-size) * 0.28);
+    gap: calc(var(--wm-h) * 0.34);
     color: var(--fg);
     line-height: 1;
   }
 
   .wordmark--sm {
-    --wm-size: 27px;
+    --wm-h: 24px;
   }
 
   .wordmark--lg {
-    --wm-size: clamp(48px, 6vw, 72px);
+    --wm-h: clamp(40px, 5vw, 60px);
   }
 
-  .wm-name {
-    display: inline-flex;
-    align-items: baseline;
-    font-family: var(--font-sans);
-    font-size: var(--wm-size);
-    font-weight: 800;
-    letter-spacing: -0.055em;
-    line-height: 0.9;
+  .wm-logo {
+    display: block;
+    flex: none;
+    height: var(--wm-h);
+    width: auto;
+    overflow: visible;
   }
 
-  .wm-dot {
-    width: 0.25em;
-    height: 0.25em;
-    margin-left: 0.07em;
-    border-radius: 50%;
-    background: var(--lime);
+  .wm-core {
+    fill: var(--lime);
+    transform-box: fill-box;
+    transform-origin: center;
     transition: transform 0.4s var(--ease-spring);
   }
 
-  a.wordmark:hover .wm-dot {
-    transform: translateY(-0.12em) scale(1.25);
+  a.wordmark:hover .wm-core {
+    transform: translateX(4px) scale(0.86);
   }
 
   .wm-tag {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: max(9px, calc(var(--wm-size) * 0.17));
+    font-size: max(9px, calc(var(--wm-h) * 0.2));
     font-weight: 700;
     letter-spacing: 0.32em;
     text-transform: uppercase;
